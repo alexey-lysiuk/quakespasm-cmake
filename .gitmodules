@@ -4,3 +4,6 @@
 [submodule "src/quakespasm-spiked"]
 	path = src/quakespasm-spiked
 	url = https://github.com/Shpoike/Quakespasm.git
+[submodule "src/vkquake"]
+	path = src/vkquake
+	url = https://github.com/Novum/vkQuake.git
