@@ -301,7 +301,7 @@ if (APPLE)
 		set(PLATFORM_SOURCE "${SRC}/Quake/pl_osx.m" ${MACOS_SOURCES} ${MACOS_RESOURCES} ${POSIX_SOURCES})
 
 		target_include_directories(${PROJECT_NAME} PRIVATE MacOSX)
-		target_link_libraries(${PROJECT_NAME} PRIVATE "-framework IOKit")
+		target_link_libraries(${PROJECT_NAME} PRIVATE "-framework AppKit -framework IOKit")
 
 		set_target_properties(${PROJECT_NAME} PROPERTIES
 			MACOSX_BUNDLE_INFO_PLIST "${SRC}/MacOSX/Info.plist"
@@ -333,6 +333,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 set_source_files_properties(${OTHER_FILES} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 if (NOT PROJECT_VKQUAKE)
+	set(OpenGL_GL_PREFERENCE GLVND)
 	find_package(OpenGL REQUIRED)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${OPENGL_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPENGL_LIBRARY}")
