@@ -41,7 +41,7 @@ jobs:
     - name: Checkout Source Code
       shell: bash
       run: |
-        git submodule update --init --depth 1 -- src/${{ matrix.target }}
+        git submodule update --init -- src/${{ matrix.target }}
 
     - name: Install Dependencies
       shell: bash
