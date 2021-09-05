@@ -1,4 +1,4 @@
-# FindVulkan module requires CMake 3.7 otherwise 3.0 should be enough
+# FindVulkan module requires CMake 3.7
 cmake_minimum_required(VERSION 3.7)
 
 # TODO: add support for target detection if CMake files are in target's directory
@@ -339,7 +339,62 @@ if(NOT PROJECT_VKQUAKE)
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPENGL_LIBRARY}")
 endif()
 
+# Required dependencies
+
 include(FindPackageHandleStandardArgs)
+
+find_path(SDL2_INCLUDE_DIR SDL.h PATH_SUFFIXES SDL2)
+find_library(SDL2_LIBRARY SDL2)
+find_package_handle_standard_args(SDL2 DEFAULT_MSG SDL2_LIBRARY SDL2_INCLUDE_DIR)
+
+if(NOT SDL2_FOUND AND WIN32)
+	set(SDL2_FOUND TRUE)
+	set(SDL2_DIR "${SRC}/Windows/SDL2")
+	set(SDL2_INCLUDE_DIR "${SDL2_DIR}/include")
+	set(SDL2_LIBRARY SDL2 SDL2main)
+
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_DIR}/lib64)
+	else()
+		target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_DIR}/lib)
+	endif()
+endif()
+
+if(SDL2_FOUND)
+	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_SDL2)
+	target_include_directories(${PROJECT_NAME} PRIVATE "${SDL2_INCLUDE_DIR}")
+	target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIBRARY}")
+else()
+	message(SEND_ERROR "Could NOT find SDL2")
+endif()
+
+# TODO: add option to use SDL1
+
+if(PROJECT_VKQUAKE)
+	find_package(Vulkan)
+	
+	if(NOT VULKAN_FOUND AND WIN32)
+		set(VULKAN_FOUND TRUE)
+		set(VULKAN_DIR "${SRC}/Windows/misc")
+		set(VULKAN_INCLUDE_DIR "${VULKAN_DIR}/include")
+		set(VULKAN_LIBRARY vulkan-1)
+
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+			target_link_directories(${PROJECT_NAME} PRIVATE ${VULKAN_DIR}/x64)
+		else()
+			target_link_directories(${PROJECT_NAME} PRIVATE ${VULKAN_DIR}/x86)
+		endif()
+	endif()
+endif()
+
+if(VULKAN_FOUND)
+	target_include_directories(${PROJECT_NAME} PRIVATE "${Vulkan_INCLUDE_DIR}")
+	target_link_libraries(${PROJECT_NAME} PRIVATE "${Vulkan_LIBRARY}")
+else()
+	message(SEND_ERROR "Could NOT find Vulkan")
+endif()
+
+# Optional dependencies
 
 find_package(FLAC)
 if(FLAC_FOUND)
@@ -378,47 +433,11 @@ if(OPUS_FOUND)
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPUS_LIBRARY}" "${OPUSFILE_LIBRARY}")
 endif()
 
-# TODO: add option to use SDL1
-
-find_path(SDL2_INCLUDE_DIR SDL.h PATH_SUFFIXES SDL2)
-find_library(SDL2_LIBRARY SDL2)
-find_package_handle_standard_args(SDL2 DEFAULT_MSG SDL2_LIBRARY SDL2_INCLUDE_DIR)
-
-if(NOT SDL2_FOUND AND WIN32)
-	set(SDL2_FOUND TRUE)
-	set(SDL2_DIR "${SRC}/Windows/SDL2")
-	set(SDL2_INCLUDE_DIR "${SDL2_DIR}/include")
-	set(SDL2_LIBRARY SDL2 SDL2main)
-
-	# TODO: detect ARM target
-	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_DIR}/lib64)
-	else()
-		target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_DIR}/lib)
-	endif()
-endif()
-
-if(SDL2_FOUND)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_SDL2)
-	target_include_directories(${PROJECT_NAME} PRIVATE "${SDL2_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIBRARY}")
-else()
-	message(SEND_ERROR "Could NOT find SDL2")
-endif()
-
 find_package(Vorbis)
 if(VORBIS_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_VORBIS)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${VORBIS_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${VORBIS_LIBRARY}" "${VORBISFILE_LIBRARY}")
-endif()
-
-if(PROJECT_VKQUAKE)
-	find_package(Vulkan)
-	if(Vulkan_FOUND)
-		target_include_directories(${PROJECT_NAME} PRIVATE "${Vulkan_INCLUDE_DIR}")
-		target_link_libraries(${PROJECT_NAME} PRIVATE "${Vulkan_LIBRARY}")
-	endif()
 endif()
 
 find_package(XMP)
