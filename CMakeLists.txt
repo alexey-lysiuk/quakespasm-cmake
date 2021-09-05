@@ -372,7 +372,7 @@ endif()
 
 if(PROJECT_VKQUAKE)
 	find_package(Vulkan)
-	
+
 	if(NOT VULKAN_FOUND AND WIN32)
 		set(VULKAN_FOUND TRUE)
 		set(VULKAN_DIR "${SRC}/Windows/misc")
@@ -385,13 +385,13 @@ if(PROJECT_VKQUAKE)
 			target_link_directories(${PROJECT_NAME} PRIVATE ${VULKAN_DIR}/x86)
 		endif()
 	endif()
-endif()
 
-if(VULKAN_FOUND)
-	target_include_directories(${PROJECT_NAME} PRIVATE "${Vulkan_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${Vulkan_LIBRARY}")
-else()
-	message(SEND_ERROR "Could NOT find Vulkan")
+	if(VULKAN_FOUND)
+		target_include_directories(${PROJECT_NAME} PRIVATE "${Vulkan_INCLUDE_DIR}")
+		target_link_libraries(${PROJECT_NAME} PRIVATE "${Vulkan_LIBRARY}")
+	else()
+		message(SEND_ERROR "Could NOT find Vulkan")
+	endif()
 endif()
 
 # Optional dependencies
