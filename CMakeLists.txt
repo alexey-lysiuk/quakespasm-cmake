@@ -226,26 +226,34 @@ set(LINUX_SOURCES
 )
 
 set(MACOS_SOURCES
-	"${SRC}/MacOSX/AppController.h"
-	"${SRC}/MacOSX/AppController.m"
-	"${SRC}/MacOSX/QuakeArgument.h"
-	"${SRC}/MacOSX/QuakeArgument.m"
-	"${SRC}/MacOSX/QuakeArguments.h"
-	"${SRC}/MacOSX/QuakeArguments.m"
-	"${SRC}/MacOSX/ScreenInfo.h"
-	"${SRC}/MacOSX/ScreenInfo.m"
-	"${SRC}/MacOSX/SDLApplication.h"
-	"${SRC}/MacOSX/SDLApplication.m"
-	"${SRC}/MacOSX/SDLMain.h"
-	"${SRC}/MacOSX/SDLMain.m"
+	"${SRC}/Quake/pl_osx.m" 
 )
 
-set(MACOS_RESOURCES
-	"${SRC}/MacOSX/English.lproj/InfoPlist.strings"
-	"${SRC}/MacOSX/English.lproj/Launcher.nib"
-	"${SRC}/MacOSX/Launcher-Info.plist"
-	"${SRC}/MacOSX/QuakeSpasm.icns"
-)
+if(NOT PROJECT_VKQUAKE)
+	set(MACOS_RESOURCES
+		"${SRC}/MacOSX/English.lproj/InfoPlist.strings"
+		"${SRC}/MacOSX/English.lproj/Launcher.nib"
+		"${SRC}/MacOSX/Launcher-Info.plist"
+		"${SRC}/MacOSX/QuakeSpasm.icns"
+	)
+
+	set(MACOS_SOURCES
+		${MACOS_SOURCES}
+		"${SRC}/MacOSX/AppController.h"
+		"${SRC}/MacOSX/AppController.m"
+		"${SRC}/MacOSX/QuakeArgument.h"
+		"${SRC}/MacOSX/QuakeArgument.m"
+		"${SRC}/MacOSX/QuakeArguments.h"
+		"${SRC}/MacOSX/QuakeArguments.m"
+		"${SRC}/MacOSX/ScreenInfo.h"
+		"${SRC}/MacOSX/ScreenInfo.m"
+		"${SRC}/MacOSX/SDLApplication.h"
+		"${SRC}/MacOSX/SDLApplication.m"
+		"${SRC}/MacOSX/SDLMain.h"
+		"${SRC}/MacOSX/SDLMain.m"
+		${MACOS_RESOURCES}
+	)
+endif()
 
 set(WINDOWS_SOURCES
 	"${SRC}/Quake/net_win.c"
@@ -295,13 +303,13 @@ endif()
 target_include_directories(${PROJECT_NAME} PRIVATE Quake)
 
 if(APPLE)
-	if(PROJECT_VKQUAKE)
-		set(PLATFORM_SOURCE "${SRC}/Quake/pl_osx.m" ${POSIX_SOURCES})
-	else()
-		set(PLATFORM_SOURCE "${SRC}/Quake/pl_osx.m" ${MACOS_SOURCES} ${MACOS_RESOURCES} ${POSIX_SOURCES})
+	target_link_libraries(${PROJECT_NAME} PRIVATE "-framework AppKit -framework IOKit")
 
+	set(PLATFORM_SOURCE ${MACOS_SOURCES} ${POSIX_SOURCES})
+	set(OTHER_FILES ${LINUX_SOURCES} ${WINDOWS_SOURCES} ${OTHER_FILES})
+
+	if(NOT PROJECT_VKQUAKE)
 		target_include_directories(${PROJECT_NAME} PRIVATE MacOSX)
-		target_link_libraries(${PROJECT_NAME} PRIVATE "-framework AppKit -framework IOKit")
 
 		set_target_properties(${PROJECT_NAME} PROPERTIES
 			MACOSX_BUNDLE_INFO_PLIST "${SRC}/MacOSX/Info.plist"
@@ -310,18 +318,16 @@ if(APPLE)
 			MACOSX_PACKAGE_LOCATION Resources
 		)
 	endif()
-
-	set(OTHER_FILES ${LINUX_SOURCES} ${WINDOWS_SOURCES} ${OTHER_FILES})
 elseif(WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Winmm Ws2_32)
 
 	set(PLATFORM_SOURCE ${WINDOWS_SOURCES})
-	set(OTHER_FILES ${LINUX_SOURCES} ${MACOS_SOURCES} ${MACOS_RESOURCES} ${POSIX_SOURCES} ${OTHER_FILES})
+	set(OTHER_FILES ${LINUX_SOURCES} ${MACOS_SOURCES} ${POSIX_SOURCES} ${OTHER_FILES})
 else()
 	target_link_libraries(${PROJECT_NAME} PRIVATE m)
 
 	set(PLATFORM_SOURCE ${LINUX_SOURCES} ${POSIX_SOURCES})
-	set(OTHER_FILES ${MACOS_SOURCES} ${MACOS_RESOURCES} ${WINDOWS_SOURCES} ${OTHER_FILES})
+	set(OTHER_FILES ${MACOS_SOURCES} ${WINDOWS_SOURCES} ${OTHER_FILES})
 endif()
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -386,7 +392,7 @@ if(PROJECT_VKQUAKE)
 		endif()
 	endif()
 
-	if(VULKAN_FOUND)
+	if(Vulkan_FOUND)
 		target_include_directories(${PROJECT_NAME} PRIVATE "${Vulkan_INCLUDE_DIR}")
 		target_link_libraries(${PROJECT_NAME} PRIVATE "${Vulkan_LIBRARY}")
 	else()
