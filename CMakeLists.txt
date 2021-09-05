@@ -168,7 +168,7 @@ set(QUAKESPASM_SOURCES
 	"${SRC}/Quake/miniz.h"
 )
 
-if (PROJECT_SPIKED)
+if(PROJECT_SPIKED)
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		"${SRC}/Quake/fs_zip.c"
@@ -178,7 +178,7 @@ if (PROJECT_SPIKED)
 		"${SRC}/Quake/snd_voip.c"
 		"${SRC}/Quake/snd_voip.h"
 	)
-elseif (PROJECT_VKQUAKE)
+elseif(PROJECT_VKQUAKE)
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		${QUAKESPASM_SOURCES}
@@ -257,7 +257,7 @@ set(WINDOWS_SOURCES
 	"${SRC}/Quake/sys_sdl_win.c"
 )
 
-if (PROJECT_VKQUAKE)
+if(PROJECT_VKQUAKE)
 	set(WINDOWS_SOURCES
 		${WINDOWS_SOURCES}
 		"${SRC}/Windows/vkQuake.ico"
@@ -276,7 +276,7 @@ set(OTHER_FILES
 	"${SRC}/Quake/lodepng.c"
 )
 
-if (PROJECT_VKQUAKE)
+if(PROJECT_VKQUAKE)
 	add_executable(${PROJECT_NAME} WIN32)
 else()
 	add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE)
@@ -287,15 +287,15 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 	USE_CODEC_WAVE
 )
 
-if (MSVC)
+if(MSVC)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
 	set(CMAKE_C_FLAGS "/MP ${CMAKE_C_FLAGS}")
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE Quake)
 
-if (APPLE)
-	if (PROJECT_VKQUAKE)
+if(APPLE)
+	if(PROJECT_VKQUAKE)
 		set(PLATFORM_SOURCE "${SRC}/Quake/pl_osx.m" ${POSIX_SOURCES})
 	else()
 		set(PLATFORM_SOURCE "${SRC}/Quake/pl_osx.m" ${MACOS_SOURCES} ${MACOS_RESOURCES} ${POSIX_SOURCES})
@@ -312,7 +312,7 @@ if (APPLE)
 	endif()
 
 	set(OTHER_FILES ${LINUX_SOURCES} ${WINDOWS_SOURCES} ${OTHER_FILES})
-elseif (WIN32)
+elseif(WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Winmm Ws2_32)
 
 	set(PLATFORM_SOURCE ${WINDOWS_SOURCES})
@@ -332,7 +332,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 set_source_files_properties(${OTHER_FILES} PROPERTIES HEADER_FILE_ONLY TRUE)
 
-if (NOT PROJECT_VKQUAKE)
+if(NOT PROJECT_VKQUAKE)
 	set(OpenGL_GL_PREFERENCE GLVND)
 	find_package(OpenGL REQUIRED)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${OPENGL_INCLUDE_DIR}")
@@ -340,28 +340,28 @@ if (NOT PROJECT_VKQUAKE)
 endif()
 
 find_package(FLAC)
-if (FLAC_FOUND)
+if(FLAC_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_FLAC)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${FLAC_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${FLAC_LIBRARY}")
 endif()
 
 find_package(MikMod)
-if (MIKMOD_FOUND)
+if(MIKMOD_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_MIKMOD)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${MIKMOD_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${MIKMOD_LIBRARY}")
 endif()
 
 find_package(MPG123)
-if (MPG123_FOUND)
+if(MPG123_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_MP3)
 	target_sources(${PROJECT_NAME} PRIVATE "${SRC}/Quake/snd_mpg123.c")
 	target_include_directories(${PROJECT_NAME} PRIVATE "${MPG123_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${MPG123_LIBRARY}")
 else()
 	find_package(Mad)
-	if (MAD_FOUND)
+	if(MAD_FOUND)
 		target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_MP3)
 		target_sources(${PROJECT_NAME} PRIVATE "${SRC}/Quake/snd_mp3.c")
 		target_include_directories(${PROJECT_NAME} PRIVATE "${MAD_INCLUDE_DIR}")
@@ -370,7 +370,7 @@ else()
 endif()
 
 find_package(Opus)
-if (OPUS_FOUND)
+if(OPUS_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_OPUS)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${OPUS_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPUS_LIBRARY}" "${OPUSFILE_LIBRARY}")
@@ -379,21 +379,21 @@ endif()
 # TODO: add option to use SDL1
 
 find_package(SDL2)
-if (NOT SDL2_FOUND AND WIN32)
+if(NOT SDL2_FOUND AND WIN32)
 	set(SDL2_FOUND TRUE)
 	set(SDL2_DIR "${SRC}/Windows/SDL2")
 	set(SDL2_INCLUDE_DIR "${SDL2_DIR}/include")
 	set(SDL2_LIBRARY SDL2 SDL2main)
 
 	# TODO: detect ARM target
-	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_DIR}/lib64)
 	else()
 		target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_DIR}/lib)
 	endif()
 endif()
 
-if (SDL2_FOUND)
+if(SDL2_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_SDL2)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${SDL2_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIBRARY}")
@@ -402,37 +402,37 @@ else()
 endif()
 
 find_package(Vorbis)
-if (VORBIS_FOUND)
+if(VORBIS_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_VORBIS)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${VORBIS_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${VORBIS_LIBRARY}" "${VORBISFILE_LIBRARY}")
 endif()
 
-if (PROJECT_VKQUAKE)
+if(PROJECT_VKQUAKE)
 	find_package(Vulkan)
-	if (Vulkan_FOUND)
+	if(Vulkan_FOUND)
 		target_include_directories(${PROJECT_NAME} PRIVATE "${Vulkan_INCLUDE_DIR}")
 		target_link_libraries(${PROJECT_NAME} PRIVATE "${Vulkan_LIBRARY}")
 	endif()
 endif()
 
 find_package(XMP)
-if (XMP_FOUND)
+if(XMP_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_XMP)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${XMP_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${XMP_LIBRARY}")
 endif()
 
-if (PROJECT_SPIKED)
+if(PROJECT_SPIKED)
 	find_package(ZLIB)
-	if (ZLIB_FOUND)
+	if(ZLIB_FOUND)
 		target_compile_definitions(${PROJECT_NAME} PRIVATE USE_ZLIB)
 		target_include_directories(${PROJECT_NAME} PRIVATE "${ZLIB_INCLUDE_DIR}")
 		target_link_libraries(${PROJECT_NAME} PRIVATE "${ZLIB_LIBRARY}")
 	endif()
 endif()
 
-if (PROJECT_VKQUAKE)
+if(PROJECT_VKQUAKE)
 	set(ENGINE_PAK_FILE vkquake.pak)
 else()
 	set(ENGINE_PAK_FILE quakespasm.pak)
