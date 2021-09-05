@@ -1,0 +1,11 @@
+find_path(VORBIS_INCLUDE_DIR NAMES vorbis/vorbisfile.h)
+mark_as_advanced(VORBIS_INCLUDE_DIR)
+
+find_library(VORBIS_LIBRARY NAMES vorbis)
+mark_as_advanced(VORBIS_LIBRARY)
+
+find_library(VORBISFILE_LIBRARY NAMES vorbisfile)
+mark_as_advanced(VORBISFILE_LIBRARY)
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(Vorbis DEFAULT_MSG VORBISFILE_LIBRARY VORBIS_LIBRARY VORBIS_INCLUDE_DIR)
