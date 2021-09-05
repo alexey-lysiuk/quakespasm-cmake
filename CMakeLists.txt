@@ -402,6 +402,49 @@ endif()
 
 # Optional dependencies
 
+function(FIND_CODEC)
+	cmake_parse_arguments(FIND_CODEC "" "NAME" "HEADERS;PATH_SUFFIXES;LIBRARIES" ${ARGN})
+	# message("FIND_CODEC_NAME = ${FIND_CODEC_NAME}")
+	# message("FIND_CODEC_HEADERS = ${FIND_CODEC_HEADERS}")
+	# message("FIND_CODEC_PATH_SUFFIXES = ${FIND_CODEC_PATH_SUFFIXES}")
+	message("FIND_CODEC_LIBRARIES = ${FIND_CODEC_LIBRARIES}")
+	
+	set(CODEC ${FIND_CODEC_NAME})
+	string(TOUPPER ${CODEC} CODEC_UPPER)
+
+	message("${CODEC_UPPER}_INCLUDE_DIR = ${${CODEC_UPPER}_INCLUDE_DIR}")
+	message("${CODEC_UPPER}_LIBRARY = ${${CODEC_UPPER}_LIBRARY}")
+
+	foreach(HEADER IN LISTS FIND_CODEC_HEADERS)
+		#message("HEADER = ${HEADER}")
+		find_path(HEADER_PATH ${HEADER} PATH_SUFFIXES ${FIND_CODEC_PATH_SUFFIXES})
+		#message("HEADER_PATH = ${HEADER_PATH}")
+		list(APPEND ${CODEC_UPPER}_INCLUDE_DIR ${HEADER_PATH})
+	endforeach()
+
+	foreach(LIB IN LISTS FIND_CODEC_LIBRARIES)
+		message("LIB = ${LIB}")
+		unset(LIB_PATH)
+		find_library(LIB_PATH ${LIB})
+		list(APPEND ${CODEC_UPPER}_LIBRARY ${LIB_PATH})
+	endforeach()
+
+message("${CODEC_UPPER}_INCLUDE_DIR = ${${CODEC_UPPER}_INCLUDE_DIR}")
+message("${CODEC_UPPER}_LIBRARY = ${${CODEC_UPPER}_LIBRARY}")
+
+	include(FindPackageHandleStandardArgs)
+	find_package_handle_standard_args(${CODEC} DEFAULT_MSG ${CODEC_UPPER}_LIBRARY ${CODEC_UPPER}_INCLUDE_DIR)
+	
+	# TODO: not found and win32
+endfunction()
+
+
+find_codec(NAME Opus
+	HEADERS opusfile.h
+	PATH_SUFFIXES opus
+	LIBRARIES opus opusfile
+)
+
 find_package(FLAC)
 if(FLAC_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_FLAC)
@@ -432,12 +475,12 @@ else()
 	endif()
 endif()
 
-find_package(Opus)
-if(OPUS_FOUND)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_OPUS)
-	target_include_directories(${PROJECT_NAME} PRIVATE "${OPUS_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPUS_LIBRARY}" "${OPUSFILE_LIBRARY}")
-endif()
+# find_package(Opus)
+# if(OPUS_FOUND)
+# 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_OPUS)
+# 	target_include_directories(${PROJECT_NAME} PRIVATE "${OPUS_INCLUDE_DIR}")
+# 	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPUS_LIBRARY}" "${OPUSFILE_LIBRARY}")
+# endif()
 
 find_package(Vorbis)
 if(VORBIS_FOUND)
