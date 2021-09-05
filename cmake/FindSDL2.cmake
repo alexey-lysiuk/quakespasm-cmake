@@ -1,6 +1,0 @@
-find_path(SDL2_INCLUDE_DIR SDL.h PATH_SUFFIXES SDL2)
-find_library(SDL2_LIBRARY SDL2)
-mark_as_advanced(SDL2_INCLUDE_DIR SDL2_LIBRARY)
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(SDL2 DEFAULT_MSG SDL2_LIBRARY SDL2_INCLUDE_DIR)

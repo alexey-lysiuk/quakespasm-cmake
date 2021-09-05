@@ -339,6 +339,8 @@ if(NOT PROJECT_VKQUAKE)
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPENGL_LIBRARY}")
 endif()
 
+include(FindPackageHandleStandardArgs)
+
 find_package(FLAC)
 if(FLAC_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_FLAC)
@@ -378,7 +380,10 @@ endif()
 
 # TODO: add option to use SDL1
 
-find_package(SDL2)
+find_path(SDL2_INCLUDE_DIR SDL.h PATH_SUFFIXES SDL2)
+find_library(SDL2_LIBRARY SDL2)
+find_package_handle_standard_args(SDL2 DEFAULT_MSG SDL2_LIBRARY SDL2_INCLUDE_DIR)
+
 if(NOT SDL2_FOUND AND WIN32)
 	set(SDL2_FOUND TRUE)
 	set(SDL2_DIR "${SRC}/Windows/SDL2")
