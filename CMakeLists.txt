@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.7)
 
 # TODO: add support for target detection if CMake files are in target's directory
 if(NOT QUAKE_TARGET)
-	message(FATAL_ERROR "QUAKE_TARGET variable is not set")
+	set(QUAKE_TARGET quakespasm)
 endif()
 
 if(QUAKE_TARGET STREQUAL quakespasm)
