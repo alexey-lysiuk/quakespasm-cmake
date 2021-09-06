@@ -418,6 +418,7 @@ function(FIND_CODEC)
 		set(${CODEC}_FOUND TRUE)
 		set(CODECS_DIR "${SRC}/Windows/codecs")
 		set(${CODEC}_INCLUDE_DIR "${CODECS_DIR}/include")
+		set(${CODEC}_LIBRARY "")
 
 		foreach(LIB IN LISTS FIND_CODEC_LIBRARIES)
 			list(APPEND ${CODEC}_LIBRARY "lib${LIB}")
