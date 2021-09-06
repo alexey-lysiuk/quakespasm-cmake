@@ -21,8 +21,6 @@ endif()
 
 project(${QUAKE_TARGET} LANGUAGES C)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-
 set(COMMON_SOURCES
 	"${SRC}/Quake/anorm_dots.h"
 	"${SRC}/Quake/anorms.h"
@@ -403,98 +401,98 @@ endif()
 # Optional dependencies
 
 function(FIND_CODEC)
-	cmake_parse_arguments(FIND_CODEC "" "NAME" "HEADERS;PATH_SUFFIXES;LIBRARIES" ${ARGN})
-	# message("FIND_CODEC_NAME = ${FIND_CODEC_NAME}")
-	# message("FIND_CODEC_HEADERS = ${FIND_CODEC_HEADERS}")
-	# message("FIND_CODEC_PATH_SUFFIXES = ${FIND_CODEC_PATH_SUFFIXES}")
-	message("FIND_CODEC_LIBRARIES = ${FIND_CODEC_LIBRARIES}")
-	
+	cmake_parse_arguments(FIND_CODEC "" "NAME;HEADER;DEFINE" "PATH_SUFFIXES;LIBRARIES;SOURCES" ${ARGN})
+
 	set(CODEC ${FIND_CODEC_NAME})
-	string(TOUPPER ${CODEC} CODEC_UPPER)
-
-	message("${CODEC_UPPER}_INCLUDE_DIR = ${${CODEC_UPPER}_INCLUDE_DIR}")
-	message("${CODEC_UPPER}_LIBRARY = ${${CODEC_UPPER}_LIBRARY}")
-
-	foreach(HEADER IN LISTS FIND_CODEC_HEADERS)
-		#message("HEADER = ${HEADER}")
-		find_path(HEADER_PATH ${HEADER} PATH_SUFFIXES ${FIND_CODEC_PATH_SUFFIXES})
-		#message("HEADER_PATH = ${HEADER_PATH}")
-		list(APPEND ${CODEC_UPPER}_INCLUDE_DIR ${HEADER_PATH})
-	endforeach()
+	find_path(${CODEC}_INCLUDE_DIR ${FIND_CODEC_HEADER} PATH_SUFFIXES ${FIND_CODEC_PATH_SUFFIXES})
 
 	foreach(LIB IN LISTS FIND_CODEC_LIBRARIES)
-		message("LIB = ${LIB}")
-		unset(LIB_PATH)
-		find_library(LIB_PATH ${LIB})
-		list(APPEND ${CODEC_UPPER}_LIBRARY ${LIB_PATH})
+		find_library(${LIB}_PATH ${LIB})
+		list(APPEND ${CODEC}_LIBRARY "${${LIB}_PATH}")
 	endforeach()
 
-message("${CODEC_UPPER}_INCLUDE_DIR = ${${CODEC_UPPER}_INCLUDE_DIR}")
-message("${CODEC_UPPER}_LIBRARY = ${${CODEC_UPPER}_LIBRARY}")
-
 	include(FindPackageHandleStandardArgs)
-	find_package_handle_standard_args(${CODEC} DEFAULT_MSG ${CODEC_UPPER}_LIBRARY ${CODEC_UPPER}_INCLUDE_DIR)
-	
-	# TODO: not found and win32
+	find_package_handle_standard_args(${CODEC} DEFAULT_MSG ${CODEC}_LIBRARY ${CODEC}_INCLUDE_DIR)
+
+	# if(${CODEC}_FOUND)
+	# 	set(${CODEC}_FOUND TRUE PARENT_SCOPE)
+	# 	target_sources(${PROJECT_NAME} PRIVATE "${FIND_CODEC_SOURCES}")
+	# 	target_compile_definitions(${PROJECT_NAME} PRIVATE ${FIND_CODEC_DEFINE})
+	# 	target_include_directories(${PROJECT_NAME} PRIVATE "${${CODEC}_INCLUDE_DIR}")
+	# 	target_link_libraries(${PROJECT_NAME} PRIVATE "${${CODEC}_LIBRARY}")
+	# else(WIN32)
+	# 	set(${CODEC}_FOUND TRUE PARENT_SCOPE)
+	# 	# TODO: not found and win32
+	# endif()
+
+	if(NOT ${CODEC}_FOUND AND WIN32)
+		set(${CODEC}_FOUND TRUE)
+		set(CODECS_DIR "${SRC}/Windows/codecs")
+		set(${CODEC}_INCLUDE_DIR "${CODECS_DIR}/include")
+		set(${CODEC}_LIBRARY "${FIND_CODEC_LIBRARIES}")
+
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+			target_link_directories(${PROJECT_NAME} PRIVATE "${CODECS_DIR}/x64")
+		else()
+			target_link_directories(${PROJECT_NAME} PRIVATE "${CODECS_DIR}/x86")
+		endif()
+	endif()
+
+	if(${CODEC}_FOUND)
+		set(${CODEC}_FOUND TRUE PARENT_SCOPE)
+		target_sources(${PROJECT_NAME} PRIVATE "${FIND_CODEC_SOURCES}")
+		target_compile_definitions(${PROJECT_NAME} PRIVATE ${FIND_CODEC_DEFINE})
+		target_include_directories(${PROJECT_NAME} PRIVATE "${${CODEC}_INCLUDE_DIR}")
+		target_link_libraries(${PROJECT_NAME} PRIVATE "${${CODEC}_LIBRARY}")
+	endif()
 endfunction()
 
-
-find_codec(NAME Opus
-	HEADERS opusfile.h
-	PATH_SUFFIXES opus
-	LIBRARIES opus opusfile
+find_codec(NAME FLAC
+	HEADER FLAC/stream_decoder.h
+	LIBRARIES FLAC
+	DEFINE USE_CODEC_FLAC
 )
 
-find_package(FLAC)
-if(FLAC_FOUND)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_FLAC)
-	target_include_directories(${PROJECT_NAME} PRIVATE "${FLAC_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${FLAC_LIBRARY}")
+find_codec(NAME MIKMOD
+	HEADER mikmod.h
+	LIBRARIES mikmod
+	DEFINE USE_CODEC_MIKMOD
+)
+
+find_codec(NAME MPG123
+	HEADER mpg123.h
+	LIBRARIES mpg123
+	DEFINE USE_CODEC_MP3
+	SOURCES "${SRC}/Quake/snd_mpg123.c"
+)
+
+if(NOT MPG123_FOUND)
+	find_codec(NAME MAD
+		HEADER mad.h
+		LIBRARIES mad
+		DEFINE USE_CODEC_MP3
+		SOURCES "${SRC}/Quake/snd_mp3.c"
+	)
 endif()
 
-find_package(MikMod)
-if(MIKMOD_FOUND)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_MIKMOD)
-	target_include_directories(${PROJECT_NAME} PRIVATE "${MIKMOD_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${MIKMOD_LIBRARY}")
-endif()
+find_codec(NAME OPUS
+	HEADER opusfile.h
+	PATH_SUFFIXES opus
+	LIBRARIES opus opusfile
+	DEFINE USE_CODEC_OPUS
+)
 
-find_package(MPG123)
-if(MPG123_FOUND)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_MP3)
-	target_sources(${PROJECT_NAME} PRIVATE "${SRC}/Quake/snd_mpg123.c")
-	target_include_directories(${PROJECT_NAME} PRIVATE "${MPG123_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${MPG123_LIBRARY}")
-else()
-	find_package(Mad)
-	if(MAD_FOUND)
-		target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_MP3)
-		target_sources(${PROJECT_NAME} PRIVATE "${SRC}/Quake/snd_mp3.c")
-		target_include_directories(${PROJECT_NAME} PRIVATE "${MAD_INCLUDE_DIR}")
-		target_link_libraries(${PROJECT_NAME} PRIVATE "${MAD_LIBRARY}")
-	endif()
-endif()
+find_codec(NAME VORBIS
+	HEADER vorbis/vorbisfile.h
+	LIBRARIES vorbis vorbisfile
+	DEFINE USE_CODEC_VORBIS
+)
 
-# find_package(Opus)
-# if(OPUS_FOUND)
-# 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_OPUS)
-# 	target_include_directories(${PROJECT_NAME} PRIVATE "${OPUS_INCLUDE_DIR}")
-# 	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPUS_LIBRARY}" "${OPUSFILE_LIBRARY}")
-# endif()
-
-find_package(Vorbis)
-if(VORBIS_FOUND)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_VORBIS)
-	target_include_directories(${PROJECT_NAME} PRIVATE "${VORBIS_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${VORBIS_LIBRARY}" "${VORBISFILE_LIBRARY}")
-endif()
-
-find_package(XMP)
-if(XMP_FOUND)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CODEC_XMP)
-	target_include_directories(${PROJECT_NAME} PRIVATE "${XMP_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${XMP_LIBRARY}")
-endif()
+find_codec(NAME XMP
+	HEADER xmp.h
+	LIBRARIES xmp
+	DEFINE USE_CODEC_XMP
+)
 
 if(PROJECT_SPIKED)
 	find_package(ZLIB)
