@@ -494,6 +494,8 @@ if(PROJECT_SPIKED)
 		target_include_directories(${PROJECT_NAME} PRIVATE "${ZLIB_INCLUDE_DIR}")
 		target_link_libraries(${PROJECT_NAME} PRIVATE "${ZLIB_LIBRARY}")
 	endif()
+
+	target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_DL_LIBS})
 endif()
 
 if(PROJECT_VKQUAKE)
