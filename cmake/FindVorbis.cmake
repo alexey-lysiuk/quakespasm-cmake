@@ -1,7 +1,0 @@
-find_path(VORBIS_INCLUDE_DIR vorbis/vorbisfile.h)
-find_library(VORBIS_LIBRARY vorbis)
-find_library(VORBISFILE_LIBRARY vorbisfile)
-mark_as_advanced(VORBIS_INCLUDE_DIR VORBIS_LIBRARY VORBISFILE_LIBRARY)
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Vorbis DEFAULT_MSG VORBISFILE_LIBRARY VORBIS_LIBRARY VORBIS_INCLUDE_DIR)

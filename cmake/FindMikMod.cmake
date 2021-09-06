@@ -1,6 +1,0 @@
-find_path(MIKMOD_INCLUDE_DIR mikmod.h)
-find_library(MIKMOD_LIBRARY mikmod)
-mark_as_advanced(MIKMOD_INCLUDE_DIR MIKMOD_LIBRARY)
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(MikMod DEFAULT_MSG MIKMOD_LIBRARY MIKMOD_INCLUDE_DIR)
