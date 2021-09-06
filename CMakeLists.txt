@@ -414,22 +414,14 @@ function(FIND_CODEC)
 	include(FindPackageHandleStandardArgs)
 	find_package_handle_standard_args(${CODEC} DEFAULT_MSG ${CODEC}_LIBRARY ${CODEC}_INCLUDE_DIR)
 
-	# if(${CODEC}_FOUND)
-	# 	set(${CODEC}_FOUND TRUE PARENT_SCOPE)
-	# 	target_sources(${PROJECT_NAME} PRIVATE "${FIND_CODEC_SOURCES}")
-	# 	target_compile_definitions(${PROJECT_NAME} PRIVATE ${FIND_CODEC_DEFINE})
-	# 	target_include_directories(${PROJECT_NAME} PRIVATE "${${CODEC}_INCLUDE_DIR}")
-	# 	target_link_libraries(${PROJECT_NAME} PRIVATE "${${CODEC}_LIBRARY}")
-	# else(WIN32)
-	# 	set(${CODEC}_FOUND TRUE PARENT_SCOPE)
-	# 	# TODO: not found and win32
-	# endif()
-
 	if(NOT ${CODEC}_FOUND AND WIN32)
 		set(${CODEC}_FOUND TRUE)
 		set(CODECS_DIR "${SRC}/Windows/codecs")
 		set(${CODEC}_INCLUDE_DIR "${CODECS_DIR}/include")
-		set(${CODEC}_LIBRARY "${FIND_CODEC_LIBRARIES}")
+
+		foreach(LIB IN LISTS FIND_CODEC_LIBRARIES)
+			list(APPEND ${CODEC}_LIBRARY "lib${LIB}")
+		endforeach()
 
 		if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 			target_link_directories(${PROJECT_NAME} PRIVATE "${CODECS_DIR}/x64")
