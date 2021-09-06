@@ -9,6 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        target: ["quakespasm", "quakespasm-spiked", "vkquake"]
         config:
         - {
             name: "Linux Clang",
@@ -33,7 +34,6 @@ jobs:
             os: windows-2019,
             extra_options: "-A x64"
           }
-        target: ["quakespasm", "quakespasm-spiked", "vkquake"]
 
     steps:
     - uses: actions/checkout@v2
