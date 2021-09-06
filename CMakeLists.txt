@@ -209,7 +209,10 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Shaders/Compiled/world_vert.c"
 	)
 else()
-	set(COMMON_SOURCES ${COMMON_SOURCES} ${QUAKESPASM_SOURCES})
+	set(COMMON_SOURCES
+		${COMMON_SOURCES}
+		${QUAKESPASM_SOURCES}
+	)
 endif()
 
 set(POSIX_SOURCES
@@ -301,10 +304,20 @@ endif()
 target_include_directories(${PROJECT_NAME} PRIVATE Quake)
 
 if(APPLE)
-	target_link_libraries(${PROJECT_NAME} PRIVATE "-framework AppKit -framework IOKit")
+	target_link_libraries(${PROJECT_NAME} PRIVATE
+		"-framework AppKit"
+		"-framework IOKit"
+	)
 
-	set(PLATFORM_SOURCE ${MACOS_SOURCES} ${POSIX_SOURCES})
-	set(OTHER_FILES ${LINUX_SOURCES} ${WINDOWS_SOURCES} ${OTHER_FILES})
+	set(PLATFORM_SOURCE
+		${MACOS_SOURCES}
+		${POSIX_SOURCES}
+	)
+	set(OTHER_FILES
+		${LINUX_SOURCES}
+		${WINDOWS_SOURCES}
+		${OTHER_FILES}
+	)
 
 	if(NOT PROJECT_VKQUAKE)
 		target_include_directories(${PROJECT_NAME} PRIVATE MacOSX)
@@ -319,13 +332,27 @@ if(APPLE)
 elseif(WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Winmm Ws2_32)
 
-	set(PLATFORM_SOURCE ${WINDOWS_SOURCES})
-	set(OTHER_FILES ${LINUX_SOURCES} ${MACOS_SOURCES} ${POSIX_SOURCES} ${OTHER_FILES})
+	set(PLATFORM_SOURCE
+		${WINDOWS_SOURCES}
+	)
+	set(OTHER_FILES
+		${LINUX_SOURCES}
+		${MACOS_SOURCES}
+		${POSIX_SOURCES}
+		${OTHER_FILES}
+	)
 else()
 	target_link_libraries(${PROJECT_NAME} PRIVATE m)
 
-	set(PLATFORM_SOURCE ${LINUX_SOURCES} ${POSIX_SOURCES})
-	set(OTHER_FILES ${MACOS_SOURCES} ${WINDOWS_SOURCES} ${OTHER_FILES})
+	set(PLATFORM_SOURCE
+		${LINUX_SOURCES}
+		${POSIX_SOURCES}
+	)
+	set(OTHER_FILES
+		${MACOS_SOURCES}
+		${WINDOWS_SOURCES}
+		${OTHER_FILES}
+	)
 endif()
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -336,14 +363,14 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 set_source_files_properties(${OTHER_FILES} PROPERTIES HEADER_FILE_ONLY TRUE)
 
+# Required dependencies
+
 if(NOT PROJECT_VKQUAKE)
 	set(OpenGL_GL_PREFERENCE GLVND)
 	find_package(OpenGL REQUIRED)
 	target_include_directories(${PROJECT_NAME} PRIVATE "${OPENGL_INCLUDE_DIR}")
 	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPENGL_LIBRARY}")
 endif()
-
-# Required dependencies
 
 include(FindPackageHandleStandardArgs)
 

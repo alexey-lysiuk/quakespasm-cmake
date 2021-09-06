@@ -25,12 +25,12 @@ jobs:
             os: macos-11
           }
         - {
-            name: "Visual Studio 32-bit",
+            name: "MSVC 32-bit",
             os: windows-2019,
             extra_options: "-A Win32"
           }
         - {
-            name: "Visual Studio 64-bit",
+            name: "MSVC 64-bit",
             os: windows-2019,
             extra_options: "-A x64"
           }
@@ -57,7 +57,7 @@ jobs:
             cd Vulkan-Headers-sdk-1.2.189.0
             cmake .
             cmake --build .
-            sudo make install
+            sudo cmake --install .
 
             # Install Vulkan loader
             curl -JOL https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/sdk-1.2.189.0.tar.gz
@@ -65,7 +65,7 @@ jobs:
             cd Vulkan-Loader-sdk-1.2.189.0
             cmake .
             cmake --build . --parallel 3
-            sudo make install
+            sudo cmake --install .
           fi
 
           brew install flac libmikmod libvorbis libxmp mpg123 opusfile sdl2
