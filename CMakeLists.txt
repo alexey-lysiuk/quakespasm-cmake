@@ -1,7 +1,6 @@
 # FindVulkan module requires CMake 3.7
 cmake_minimum_required(VERSION 3.7)
 
-# TODO: add support for target detection if CMake files are in target's directory
 if(NOT QUAKE_TARGET)
 	set(QUAKE_TARGET quakespasm)
 endif()
@@ -398,8 +397,6 @@ if(SDL2_FOUND)
 else()
 	message(SEND_ERROR "Could NOT find SDL2")
 endif()
-
-# TODO: add option to use SDL1
 
 if(PROJECT_VKQUAKE)
 	find_package(Vulkan)
