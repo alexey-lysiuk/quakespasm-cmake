@@ -7,18 +7,17 @@ endif()
 
 if(QUAKE_TARGET STREQUAL quakespasm)
 	set(PROJECT_QUAKESPASM TRUE)
-	set(SRC "${CMAKE_SOURCE_DIR}/src/${QUAKE_TARGET}")
 elseif(QUAKE_TARGET STREQUAL quakespasm-spiked)
 	set(PROJECT_SPIKED TRUE)
-	set(SRC "${CMAKE_SOURCE_DIR}/src/${QUAKE_TARGET}/quakespasm")
 elseif(QUAKE_TARGET STREQUAL vkquake)
 	set(PROJECT_VKQUAKE TRUE)
-	set(SRC "${CMAKE_SOURCE_DIR}/src/${QUAKE_TARGET}")
 else()
 	message(FATAL_ERROR "Unknown target ${QUAKE_TARGET}")
 endif()
 
 project(${QUAKE_TARGET} LANGUAGES C)
+
+set(SRC "${CMAKE_SOURCE_DIR}/src/${QUAKE_TARGET}")
 
 set(COMMON_SOURCES
 	"${SRC}/Quake/anorm_dots.h"
