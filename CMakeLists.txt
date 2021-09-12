@@ -1,8 +1,27 @@
 # FindVulkan module requires CMake 3.7
 cmake_minimum_required(VERSION 3.7)
 
-if(NOT QUAKE_TARGET)
-	set(QUAKE_TARGET quakespasm)
+if(QUAKE_TARGET)
+	set(SRC "${CMAKE_SOURCE_DIR}/src/${QUAKE_TARGET}")
+else()
+	set(SRC "${CMAKE_SOURCE_DIR}")
+
+	if(EXISTS "${SRC}/Quakespasm-Spiked.txt")
+		set(QUAKE_TARGET quakespasm-spiked)
+	elseif(EXISTS "${SRC}/Quake/vkquake.pak")
+		set(QUAKE_TARGET vkquake)
+	elseif(EXISTS "${SRC}/Quakespasm.txt")
+		set(QUAKE_TARGET quakespasm)
+	endif()
+
+	if(NOT QUAKE_TARGET)
+		set(SRC_DEFAULT "${SRC}/src/quakespasm")
+
+		if(EXISTS "${SRC_DEFAULT}")
+			set(QUAKE_TARGET quakespasm)
+			set(SRC "${SRC_DEFAULT}")
+		endif()
+	endif()
 endif()
 
 if(QUAKE_TARGET STREQUAL quakespasm)
@@ -16,8 +35,6 @@ else()
 endif()
 
 project(${QUAKE_TARGET} LANGUAGES C)
-
-set(SRC "${CMAKE_SOURCE_DIR}/src/${QUAKE_TARGET}")
 
 set(COMMON_SOURCES
 	"${SRC}/Quake/anorm_dots.h"
