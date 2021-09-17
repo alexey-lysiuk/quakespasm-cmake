@@ -1,6 +1,6 @@
 [submodule "src/quakespasm"]
 	path = src/quakespasm
-	url = https://git.code.sf.net/p/quakespasm/quakespasm
+	url = https://github.com/sezero/quakespasm.git
 [submodule "src/quakespasm-spiked"]
 	path = src/quakespasm-spiked
 	url = https://github.com/Shpoike/Quakespasm.git
