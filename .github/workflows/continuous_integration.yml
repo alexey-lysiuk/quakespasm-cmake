@@ -47,6 +47,7 @@ jobs:
     - name: Patch Source Code
       shell: bash
       run: |
+        shopt -s nullglob
         for PATCH in patch/${{ matrix.target }}/*; do
           echo "Applying $PATCH..."
           patch --directory=src/${{ matrix.target }} --strip=1 < "${PATCH}"
