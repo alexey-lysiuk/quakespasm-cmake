@@ -47,9 +47,9 @@ jobs:
     - name: Patch Source Code
       shell: bash
       run: |
-        for PATCH in patch/${QUAKE_TARGET}/*; do
+        for PATCH in patch/${{ matrix.target }}/*; do
           echo "Applying $PATCH..."
-          patch --directory=src/${QUAKE_TARGET} --strip=1 < "${PATCH}"
+          patch --directory=src/${{ matrix.target }} --strip=1 < "${PATCH}"
         done
 
     - name: Install Dependencies
