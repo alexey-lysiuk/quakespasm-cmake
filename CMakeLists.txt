@@ -334,11 +334,17 @@ if(APPLE)
 		${OTHER_FILES}
 	)
 
+	if(NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+		set(CMAKE_OSX_DEPLOYMENT_TARGET "10.11")
+	endif()
+
 	if(NOT PROJECT_VKQUAKE)
 		target_include_directories(${PROJECT_NAME} PRIVATE MacOSX)
 
 		set_target_properties(${PROJECT_NAME} PROPERTIES
 			MACOSX_BUNDLE_INFO_PLIST "${SRC}/MacOSX/Info.plist"
+			# MACOSX_BUNDLE_GUI_IDENTIFIER "net.sf.quakespasm.QuakeSpasm"
+			XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "net.sf.quakespasm.QuakeSpasm"
 		)
 		set_source_files_properties(${MACOS_RESOURCES} PROPERTIES 
 			MACOSX_PACKAGE_LOCATION Resources
