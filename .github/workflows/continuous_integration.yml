@@ -90,7 +90,7 @@ jobs:
       shell: bash
       run: |
         export MAKEFLAGS=--keep-going
-        cmake --build build --parallel 3
+        cmake --build build --config Release --parallel 3
 
     - name: List Build Directory
       if: always()
