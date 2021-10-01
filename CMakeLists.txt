@@ -339,6 +339,7 @@ if(APPLE)
 
 		set_target_properties(${PROJECT_NAME} PROPERTIES
 			MACOSX_BUNDLE_INFO_PLIST "${SRC}/MacOSX/Info.plist"
+			XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "net.sf.quakespasm.QuakeSpasm"
 		)
 		set_source_files_properties(${MACOS_RESOURCES} PROPERTIES 
 			MACOSX_PACKAGE_LOCATION Resources
