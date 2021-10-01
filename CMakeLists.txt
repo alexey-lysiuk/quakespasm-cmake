@@ -334,6 +334,10 @@ if(APPLE)
 		${OTHER_FILES}
 	)
 
+	if(NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+		set(CMAKE_OSX_DEPLOYMENT_TARGET "10.11")
+	endif()
+
 	if(NOT PROJECT_VKQUAKE)
 		target_include_directories(${PROJECT_NAME} PRIVATE MacOSX)
 
