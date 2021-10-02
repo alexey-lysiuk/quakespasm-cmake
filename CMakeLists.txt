@@ -300,6 +300,10 @@ set(OTHER_FILES
 	"${SRC}/Quake/lodepng.c"
 )
 
+if(NOT DCMAKE_BUILD_TYPE)
+	set(DCMAKE_BUILD_TYPE Release)
+endif()
+
 if(PROJECT_VKQUAKE)
 	add_executable(${PROJECT_NAME} WIN32)
 else()
