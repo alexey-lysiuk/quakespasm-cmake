@@ -245,20 +245,8 @@ set(MACOS_SOURCES
 	"${SRC}/Quake/pl_osx.m" 
 )
 
-if(APPLE AND NOT PROJECT_VKQUAKE)
-	option(QUAKE_MACOS_BUNDLE "Create macOS application bundle" ON)
-endif()
-
-if(QUAKE_MACOS_BUNDLE)
-	set(MACOS_RESOURCES
-		"${SRC}/MacOSX/English.lproj/InfoPlist.strings"
-		"${SRC}/MacOSX/English.lproj/Launcher.nib"
-		"${SRC}/MacOSX/Launcher-Info.plist"
-		"${SRC}/MacOSX/QuakeSpasm.icns"
-	)
-
-	set(MACOS_SOURCES
-		${MACOS_SOURCES}
+if(NOT PROJECT_VKQUAKE)
+	set(MACOS_BUNDLE_SOURCES
 		"${SRC}/MacOSX/AppController.h"
 		"${SRC}/MacOSX/AppController.m"
 		"${SRC}/MacOSX/QuakeArgument.h"
@@ -271,7 +259,13 @@ if(QUAKE_MACOS_BUNDLE)
 		"${SRC}/MacOSX/SDLApplication.m"
 		"${SRC}/MacOSX/SDLMain.h"
 		"${SRC}/MacOSX/SDLMain.m"
-		${MACOS_RESOURCES}
+	)
+
+	set(MACOS_RESOURCES
+		"${SRC}/MacOSX/English.lproj/InfoPlist.strings"
+		"${SRC}/MacOSX/English.lproj/Launcher.nib"
+		"${SRC}/MacOSX/Launcher-Info.plist"
+		"${SRC}/MacOSX/QuakeSpasm.icns"
 	)
 endif()
 
@@ -308,6 +302,10 @@ if(NOT DCMAKE_BUILD_TYPE)
 	set(DCMAKE_BUILD_TYPE Release)
 endif()
 
+if(APPLE AND NOT PROJECT_VKQUAKE)
+	option(QUAKE_MACOS_BUNDLE "Create macOS application bundle" ON)
+endif()
+
 if(QUAKE_MACOS_BUNDLE)
 	add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE)
 else()
@@ -327,10 +325,6 @@ endif()
 target_include_directories(${PROJECT_NAME} PRIVATE Quake)
 
 if(APPLE)
-	if(NOT QUAKE_MACOS_BUNDLE)
-		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-alias -Wl,_SDL_main -Wl,_main") 
-	endif()
-	
 	target_link_libraries(${PROJECT_NAME} PRIVATE
 		"-framework AppKit"
 		"-framework IOKit"
@@ -351,6 +345,12 @@ if(APPLE)
 	endif()
 
 	if(QUAKE_MACOS_BUNDLE)
+		set(PLATFORM_SOURCE
+			${PLATFORM_SOURCE}
+			${MACOS_BUNDLE_SOURCES}
+			${MACOS_RESOURCES}
+		)
+
 		target_include_directories(${PROJECT_NAME} PRIVATE MacOSX)
 
 		set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -360,6 +360,15 @@ if(APPLE)
 		set_source_files_properties(${MACOS_RESOURCES} PROPERTIES 
 			MACOSX_PACKAGE_LOCATION Resources
 		)
+	else()
+		set(OTHER_FILES
+			${OTHER_FILES}
+			${MACOS_BUNDLE_SOURCES}
+			${MACOS_RESOURCES}
+		)
+
+		# Workaround missing main function
+		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-alias -Wl,_SDL_main -Wl,_main") 
 	endif()
 elseif(WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Winmm Ws2_32)
