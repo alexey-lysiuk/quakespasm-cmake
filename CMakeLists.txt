@@ -245,7 +245,11 @@ set(MACOS_SOURCES
 	"${SRC}/Quake/pl_osx.m" 
 )
 
-if(NOT PROJECT_VKQUAKE)
+if(APPLE AND NOT PROJECT_VKQUAKE)
+	option(QUAKE_MACOS_BUNDLE "Create macOS application bundle" ON)
+endif()
+
+if(QUAKE_MACOS_BUNDLE)
 	set(MACOS_RESOURCES
 		"${SRC}/MacOSX/English.lproj/InfoPlist.strings"
 		"${SRC}/MacOSX/English.lproj/Launcher.nib"
@@ -304,10 +308,10 @@ if(NOT DCMAKE_BUILD_TYPE)
 	set(DCMAKE_BUILD_TYPE Release)
 endif()
 
-if(PROJECT_VKQUAKE)
-	add_executable(${PROJECT_NAME} WIN32)
-else()
+if(QUAKE_MACOS_BUNDLE)
 	add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE)
+else()
+	add_executable(${PROJECT_NAME} WIN32)
 endif()
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
@@ -323,6 +327,10 @@ endif()
 target_include_directories(${PROJECT_NAME} PRIVATE Quake)
 
 if(APPLE)
+	if(NOT QUAKE_MACOS_BUNDLE)
+		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-alias -Wl,_SDL_main -Wl,_main") 
+	endif()
+	
 	target_link_libraries(${PROJECT_NAME} PRIVATE
 		"-framework AppKit"
 		"-framework IOKit"
@@ -342,7 +350,7 @@ if(APPLE)
 		set(CMAKE_OSX_DEPLOYMENT_TARGET "10.11")
 	endif()
 
-	if(NOT PROJECT_VKQUAKE)
+	if(QUAKE_MACOS_BUNDLE)
 		target_include_directories(${PROJECT_NAME} PRIVATE MacOSX)
 
 		set_target_properties(${PROJECT_NAME} PROPERTIES
