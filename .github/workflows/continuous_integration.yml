@@ -43,16 +43,6 @@ jobs:
       run: |
         git submodule update --init -- src/${{ matrix.target }}
 
-
-    - name: Patch Source Code
-      shell: bash
-      run: |
-        shopt -s nullglob
-        for PATCH in patch/${{ matrix.target }}/*; do
-          echo "Applying $PATCH..."
-          patch --directory=src/${{ matrix.target }} --strip=1 < "${PATCH}"
-        done
-
     - name: Install Dependencies
       shell: bash
       run: |
