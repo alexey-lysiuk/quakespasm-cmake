@@ -325,6 +325,10 @@ endif()
 target_include_directories(${PROJECT_NAME} PRIVATE Quake)
 
 if(APPLE)
+	if(NOT PROJECT_VKQUAKE)
+		target_compile_definitions(${PROJECT_NAME} PRIVATE GL_SILENCE_DEPRECATION)
+	endif()
+
 	target_link_libraries(${PROJECT_NAME} PRIVATE
 		"-framework AppKit"
 		"-framework IOKit"
