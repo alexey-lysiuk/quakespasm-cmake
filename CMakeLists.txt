@@ -181,13 +181,17 @@ set(QUAKESPASM_SOURCES
 	"${SRC}/Quake/miniz.h"
 )
 
+set(SPIKED_SOURCES
+	"${SRC}/Quake/mdfour.c"
+	"${SRC}/Quake/pr_ext.c"
+	"${SRC}/Quake/r_part_fte.c"
+)
+
 if(PROJECT_SPIKED)
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
+		${SPIKED_SOURCES}
 		"${SRC}/Quake/fs_zip.c"
-		"${SRC}/Quake/mdfour.c"
-		"${SRC}/Quake/pr_ext.c"
-		"${SRC}/Quake/r_part_fte.c"
 		"${SRC}/Quake/snd_voip.c"
 		"${SRC}/Quake/snd_voip.h"
 	)
@@ -195,10 +199,9 @@ elseif(PROJECT_VKQUAKE)
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		${QUAKESPASM_SOURCES}
+		${SPIKED_SOURCES}
 		"${SRC}/Quake/gl_heap.c"
 		"${SRC}/Quake/gl_heap.h"
-		"${SRC}/Quake/mdfour.c"
-		"${SRC}/Quake/pr_ext.c"
 		"${SRC}/Shaders/Compiled/alias_alphatest_frag.c"
 		"${SRC}/Shaders/Compiled/alias_frag.c"
 		"${SRC}/Shaders/Compiled/alias_vert.c"
