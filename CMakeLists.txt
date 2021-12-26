@@ -196,35 +196,41 @@ if(PROJECT_SPIKED)
 		"${SRC}/Quake/snd_voip.h"
 	)
 elseif(PROJECT_VKQUAKE)
+	if(DCMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(SHADERS_FLAVOR Debug)
+	else()
+		set(SHADERS_FLAVOR Release)
+	endif()
+
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		${QUAKESPASM_SOURCES}
 		${SPIKED_SOURCES}
 		"${SRC}/Quake/gl_heap.c"
 		"${SRC}/Quake/gl_heap.h"
-		"${SRC}/Shaders/Compiled/Release/alias_alphatest.frag.c"
-		"${SRC}/Shaders/Compiled/Release/alias.frag.c"
-		"${SRC}/Shaders/Compiled/Release/alias.vert.c"
-		"${SRC}/Shaders/Compiled/Release/basic_alphatest.frag.c"
-		"${SRC}/Shaders/Compiled/Release/basic.frag.c"
-		"${SRC}/Shaders/Compiled/Release/basic_notex.frag.c"
-		"${SRC}/Shaders/Compiled/Release/basic.vert.c"
-		"${SRC}/Shaders/Compiled/Release/cs_tex_warp.comp.c"
-		"${SRC}/Shaders/Compiled/Release/postprocess.frag.c"
-		"${SRC}/Shaders/Compiled/Release/postprocess.vert.c"
-		"${SRC}/Shaders/Compiled/Release/screen_effects_10bit.comp.c"
-		"${SRC}/Shaders/Compiled/Release/screen_effects_10bit_scale.comp.c"
-		"${SRC}/Shaders/Compiled/Release/screen_effects_10bit_scale_sops.comp.c"
-		"${SRC}/Shaders/Compiled/Release/screen_effects_8bit.comp.c"
-		"${SRC}/Shaders/Compiled/Release/screen_effects_8bit_scale.comp.c"
-		"${SRC}/Shaders/Compiled/Release/screen_effects_8bit_scale_sops.comp.c"
-		"${SRC}/Shaders/Compiled/Release/showtris.frag.c"
-		"${SRC}/Shaders/Compiled/Release/showtris.vert.c"
-		"${SRC}/Shaders/Compiled/Release/sky_box.frag.c"
-		"${SRC}/Shaders/Compiled/Release/sky_layer.frag.c"
-		"${SRC}/Shaders/Compiled/Release/sky_layer.vert.c"
-		"${SRC}/Shaders/Compiled/Release/world.frag.c"
-		"${SRC}/Shaders/Compiled/Release/world.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias_alphatest.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic_alphatest.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic_notex.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/cs_tex_warp.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/postprocess.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/postprocess.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit_scale.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit_scale_sops.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_8bit.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_8bit_scale.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_8bit_scale_sops.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/showtris.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/showtris.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_box.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_layer.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_layer.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/world.frag.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/world.vert.c"
 	)
 else()
 	set(COMMON_SOURCES
