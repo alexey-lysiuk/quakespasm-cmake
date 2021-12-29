@@ -229,6 +229,7 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_box.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_layer.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_layer.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/update_lightmap.comp.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/world.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/world.vert.c"
 	)
