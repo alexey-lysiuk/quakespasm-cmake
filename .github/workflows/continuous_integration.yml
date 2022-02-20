@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ["quakespasm", "quakespasm-spiked", "vkquake"]
+        target: ["quakespasm", "quakespasm-spiked", "vkquake", "ironwail"]
         config:
         - {
             name: "Linux Clang",
