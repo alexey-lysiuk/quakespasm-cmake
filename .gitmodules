@@ -7,3 +7,6 @@
 [submodule "src/vkquake"]
 	path = src/vkquake
 	url = https://github.com/Novum/vkQuake.git
+[submodule "src/ironwail"]
+	path = src/ironwail
+	url = https://github.com/andrei-drexler/ironwail.git
