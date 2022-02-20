@@ -39,6 +39,7 @@ else()
 endif()
 
 project(${QUAKE_TARGET} LANGUAGES C)
+message("Quake target is set to '${QUAKE_TARGET}'")
 
 set(COMMON_SOURCES
 	"${SRC}/Quake/anorm_dots.h"
