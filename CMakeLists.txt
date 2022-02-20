@@ -10,6 +10,8 @@ else()
 		set(QUAKE_TARGET quakespasm-spiked)
 	elseif(EXISTS "${SRC}/Quake/vkquake.pak")
 		set(QUAKE_TARGET vkquake)
+	elseif(EXISTS "${SRC}/Quake/gl_shaders.c")
+		set(QUAKE_TARGET ironwail)
 	elseif(EXISTS "${SRC}/Quakespasm.txt")
 		set(QUAKE_TARGET quakespasm)
 	endif()
@@ -30,6 +32,8 @@ elseif(QUAKE_TARGET STREQUAL quakespasm-spiked)
 	set(PROJECT_SPIKED TRUE)
 elseif(QUAKE_TARGET STREQUAL vkquake)
 	set(PROJECT_VKQUAKE TRUE)
+elseif(QUAKE_TARGET STREQUAL ironwail)
+	set(PROJECT_IRONWAIL TRUE)
 else()
 	message(FATAL_ERROR "Unknown target ${QUAKE_TARGET}")
 endif()
@@ -195,6 +199,14 @@ if(PROJECT_SPIKED)
 		"${SRC}/Quake/snd_voip.c"
 		"${SRC}/Quake/snd_voip.h"
 	)
+elseif(PROJECT_IRONWAIL)
+	set(COMMON_SOURCES
+		${COMMON_SOURCES}
+		"${SRC}/Quake/gl_shaders.c"
+		"${SRC}/Quake/gl_shaders.h"
+		"${SRC}/Quake/miniz.c"
+		"${SRC}/Quake/miniz.h"
+	)
 elseif(PROJECT_VKQUAKE)
 	if(DCMAKE_BUILD_TYPE STREQUAL "Debug")
 		set(SHADERS_FLAVOR Debug)
@@ -255,7 +267,7 @@ set(MACOS_SOURCES
 	"${SRC}/Quake/pl_osx.m" 
 )
 
-if(NOT PROJECT_VKQUAKE)
+if(PROJECT_QUAKESPASM OR PROJECT_SPIKED)
 	set(MACOS_BUNDLE_SOURCES
 		"${SRC}/MacOSX/AppController.h"
 		"${SRC}/MacOSX/AppController.m"
@@ -312,7 +324,7 @@ if(NOT DCMAKE_BUILD_TYPE)
 	set(DCMAKE_BUILD_TYPE Release)
 endif()
 
-if(APPLE AND NOT PROJECT_VKQUAKE)
+if(APPLE AND (PROJECT_QUAKESPASM OR PROJECT_SPIKED))
 	option(QUAKE_MACOS_BUNDLE "Create macOS application bundle" ON)
 endif()
 
