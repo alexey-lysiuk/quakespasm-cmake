@@ -595,6 +595,8 @@ endif()
 
 if(PROJECT_VKQUAKE)
 	set(ENGINE_PAK_FILE vkquake.pak)
+elseif(PROJECT_IRONWAIL)
+	set(ENGINE_PAK_FILE ironwail.pak)
 else()
 	set(ENGINE_PAK_FILE quakespasm.pak)
 endif()
