@@ -207,6 +207,8 @@ elseif(PROJECT_IRONWAIL)
 		"${SRC}/Quake/gl_shaders.h"
 		"${SRC}/Quake/miniz.c"
 		"${SRC}/Quake/miniz.h"
+		"${SRC}/Quake/steam.c"
+		"${SRC}/Quake/steam.h"
 	)
 elseif(PROJECT_VKQUAKE)
 	if(DCMAKE_BUILD_TYPE STREQUAL "Debug")
