@@ -437,13 +437,6 @@ set_source_files_properties(${OTHER_FILES} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 # Required dependencies
 
-if(NOT PROJECT_VKQUAKE)
-	set(OpenGL_GL_PREFERENCE GLVND)
-	find_package(OpenGL REQUIRED)
-	target_include_directories(${PROJECT_NAME} PRIVATE "${OPENGL_INCLUDE_DIR}")
-	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPENGL_LIBRARY}")
-endif()
-
 include(FindPackageHandleStandardArgs)
 
 find_path(SDL2_INCLUDE_DIR SDL.h PATH_SUFFIXES SDL2)
@@ -493,6 +486,11 @@ if(PROJECT_VKQUAKE)
 	else()
 		message(SEND_ERROR "Could NOT find Vulkan")
 	endif()
+else()
+	set(OpenGL_GL_PREFERENCE GLVND)
+	find_package(OpenGL REQUIRED)
+	target_include_directories(${PROJECT_NAME} PRIVATE "${OPENGL_INCLUDE_DIR}")
+	target_link_libraries(${PROJECT_NAME} PRIVATE "${OPENGL_LIBRARY}")
 endif()
 
 # Optional dependencies
