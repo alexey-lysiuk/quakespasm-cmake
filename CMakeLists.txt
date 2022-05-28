@@ -221,8 +221,11 @@ elseif(PROJECT_VKQUAKE)
 		${COMMON_SOURCES}
 		${QUAKESPASM_SOURCES}
 		${SPIKED_SOURCES}
+		"${SRC}/Quake/atomics.h"
 		"${SRC}/Quake/gl_heap.c"
 		"${SRC}/Quake/gl_heap.h"
+		"${SRC}/Quake/tasks.c"
+		"${SRC}/Quake/tasks.h"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias_alphatest.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias.vert.c"
