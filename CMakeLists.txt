@@ -224,6 +224,8 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Quake/atomics.h"
 		"${SRC}/Quake/gl_heap.c"
 		"${SRC}/Quake/gl_heap.h"
+		"${SRC}/Quake/palette.c"
+		"${SRC}/Quake/palette.h"
 		"${SRC}/Quake/tasks.c"
 		"${SRC}/Quake/tasks.h"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias_alphatest.frag.c"
