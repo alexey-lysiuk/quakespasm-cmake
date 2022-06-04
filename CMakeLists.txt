@@ -596,6 +596,8 @@ if(PROJECT_SPIKED)
 	endif()
 
 	target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_DL_LIBS})
+elseif(PROJECT_VKQUAKE)
+	set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
 endif()
 
 if(PROJECT_VKQUAKE)
