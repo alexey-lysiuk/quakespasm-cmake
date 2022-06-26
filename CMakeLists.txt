@@ -69,6 +69,7 @@ set(COMMON_SOURCES
 	"${SRC}/Quake/crc.h"
 	"${SRC}/Quake/cvar.c"
 	"${SRC}/Quake/cvar.h"
+	"${SRC}/Quake/default_cfg.h"
 	"${SRC}/Quake/draw.h"
 	"${SRC}/Quake/filenames.h"
 	"${SRC}/Quake/gl_draw.c"
@@ -176,14 +177,16 @@ set(COMMON_SOURCES
 	"${SRC}/Quake/world.c"
 	"${SRC}/Quake/world.h"
 	"${SRC}/Quake/wsaerror.h"
-	"${SRC}/Quake/zone.c"
-	"${SRC}/Quake/zone.h"
 )
 
-set(QUAKESPASM_SOURCES
-	"${SRC}/Quake/default_cfg.h"
+set(MINIZ_SOURCES
 	"${SRC}/Quake/miniz.c"
 	"${SRC}/Quake/miniz.h"
+)
+
+set(ZONE_SOURCES
+	"${SRC}/Quake/zone.c"
+	"${SRC}/Quake/zone.h"
 )
 
 set(SPIKED_SOURCES
@@ -196,6 +199,7 @@ if(PROJECT_SPIKED)
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		${SPIKED_SOURCES}
+		${ZONE_SOURCES}
 		"${SRC}/Quake/fs_zip.c"
 		"${SRC}/Quake/snd_voip.c"
 		"${SRC}/Quake/snd_voip.h"
@@ -203,10 +207,10 @@ if(PROJECT_SPIKED)
 elseif(PROJECT_IRONWAIL)
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
+		${MINIZ_SOURCES}
+		${ZONE_SOURCES}
 		"${SRC}/Quake/gl_shaders.c"
 		"${SRC}/Quake/gl_shaders.h"
-		"${SRC}/Quake/miniz.c"
-		"${SRC}/Quake/miniz.h"
 		"${SRC}/Quake/steam.c"
 		"${SRC}/Quake/steam.h"
 	)
@@ -219,11 +223,13 @@ elseif(PROJECT_VKQUAKE)
 
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
-		${QUAKESPASM_SOURCES}
 		${SPIKED_SOURCES}
+		${MINIZ_SOURCES}
 		"${SRC}/Quake/atomics.h"
 		"${SRC}/Quake/gl_heap.c"
 		"${SRC}/Quake/gl_heap.h"
+		"${SRC}/Quake/mem.c"
+		"${SRC}/Quake/mem.h"
 		"${SRC}/Quake/palette.c"
 		"${SRC}/Quake/palette.h"
 		"${SRC}/Quake/tasks.c"
@@ -256,7 +262,8 @@ elseif(PROJECT_VKQUAKE)
 else()
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
-		${QUAKESPASM_SOURCES}
+		${MINIZ_SOURCES}
+		${ZONE_SOURCES}
 	)
 endif()
 
@@ -309,11 +316,46 @@ set(WINDOWS_SOURCES
 	"${SRC}/Quake/sys_sdl_win.c"
 )
 
+set(OTHER_FILES
+	"${SRC}/Quake/cd_sdl.c"
+	"${SRC}/Quake/lodepng.c"
+)
+
 if(PROJECT_VKQUAKE)
 	set(WINDOWS_SOURCES
 		${WINDOWS_SOURCES}
 		"${SRC}/Windows/vkQuake.ico"
 		"${SRC}/Windows/vkQuake.rc"
+	)
+
+	set(OTHER_FILES
+		${OTHER_FILES}
+		"${SRC}/Quake/mimalloc/alloc-aligned.c"
+		"${SRC}/Quake/mimalloc/alloc-override-osx.c"
+		"${SRC}/Quake/mimalloc/alloc-override.c"
+		"${SRC}/Quake/mimalloc/alloc-posix.c"
+		"${SRC}/Quake/mimalloc/alloc.c"
+		"${SRC}/Quake/mimalloc/arena.c"
+		"${SRC}/Quake/mimalloc/bitmap.c"
+		"${SRC}/Quake/mimalloc/heap.c"
+		"${SRC}/Quake/mimalloc/init.c"
+		"${SRC}/Quake/mimalloc/options.c"
+		"${SRC}/Quake/mimalloc/os.c"
+		"${SRC}/Quake/mimalloc/page-queue.c"
+		"${SRC}/Quake/mimalloc/page.c"
+		"${SRC}/Quake/mimalloc/random.c"
+		"${SRC}/Quake/mimalloc/region.c"
+		"${SRC}/Quake/mimalloc/segment-cache.c"
+		"${SRC}/Quake/mimalloc/segment.c"
+		"${SRC}/Quake/mimalloc/static.c"
+		"${SRC}/Quake/mimalloc/stats.c"
+		"${SRC}/Quake/mimalloc/bitmap.h"
+		"${SRC}/Quake/mimalloc/mimalloc-atomic.h"
+		"${SRC}/Quake/mimalloc/mimalloc-internal.h"
+		"${SRC}/Quake/mimalloc/mimalloc-new-delete.h"
+		"${SRC}/Quake/mimalloc/mimalloc-override.h"
+		"${SRC}/Quake/mimalloc/mimalloc-types.h"
+		"${SRC}/Quake/mimalloc/mimalloc.h"
 	)
 else()
 	set(WINDOWS_SOURCES
@@ -322,11 +364,6 @@ else()
 		"${SRC}/Windows/QuakeSpasm.rc"
 	)
 endif()
-
-set(OTHER_FILES
-	"${SRC}/Quake/cd_sdl.c"
-	"${SRC}/Quake/lodepng.c"
-)
 
 if(NOT DCMAKE_BUILD_TYPE)
 	set(DCMAKE_BUILD_TYPE Release)
@@ -491,6 +528,9 @@ if(PROJECT_VKQUAKE)
 	else()
 		message(SEND_ERROR "Could NOT find Vulkan")
 	endif()
+
+	find_package(Threads REQUIRED)
+	target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
 else()
 	set(OpenGL_GL_PREFERENCE GLVND)
 	find_package(OpenGL REQUIRED)
