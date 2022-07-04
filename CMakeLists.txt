@@ -433,15 +433,19 @@ if(APPLE)
 		set_source_files_properties(${MACOS_RESOURCES} PROPERTIES 
 			MACOSX_PACKAGE_LOCATION Resources
 		)
-	elseif(PROJECT_QUAKESPASM OR PROJECT_SPIKED)
-		set(OTHER_FILES
-			${OTHER_FILES}
-			${MACOS_BUNDLE_SOURCES}
-			${MACOS_RESOURCES}
-		)
+	else()
+		if(PROJECT_QUAKESPASM OR PROJECT_SPIKED)
+			set(OTHER_FILES
+				${OTHER_FILES}
+				${MACOS_BUNDLE_SOURCES}
+				${MACOS_RESOURCES}
+			)
+		endif()
 
-		# Workaround missing main function
-		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-alias -Wl,_SDL_main -Wl,_main") 
+		if(NOT PROJECT_VKQUAKE)
+			# Workaround missing main function
+			set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-alias -Wl,_SDL_main -Wl,_main")
+		endif()
 	endif()
 elseif(WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Winmm Ws2_32)
