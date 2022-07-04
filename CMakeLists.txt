@@ -42,7 +42,6 @@ project(${QUAKE_TARGET} LANGUAGES C)
 message("Quake target is set to '${QUAKE_TARGET}'")
 
 set(COMMON_SOURCES
-	"${SRC}/Quake/anorm_dots.h"
 	"${SRC}/Quake/anorms.h"
 	"${SRC}/Quake/arch_def.h"
 	"${SRC}/Quake/bgmusic.c"
@@ -184,7 +183,8 @@ set(MINIZ_SOURCES
 	"${SRC}/Quake/miniz.h"
 )
 
-set(ZONE_SOURCES
+set(NON_VKQUAKE_SOURCES
+	"${SRC}/Quake/anorm_dots.h"
 	"${SRC}/Quake/zone.c"
 	"${SRC}/Quake/zone.h"
 )
@@ -199,7 +199,7 @@ if(PROJECT_SPIKED)
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		${SPIKED_SOURCES}
-		${ZONE_SOURCES}
+		${NON_VKQUAKE_SOURCES}
 		"${SRC}/Quake/fs_zip.c"
 		"${SRC}/Quake/snd_voip.c"
 		"${SRC}/Quake/snd_voip.h"
@@ -208,7 +208,7 @@ elseif(PROJECT_IRONWAIL)
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		${MINIZ_SOURCES}
-		${ZONE_SOURCES}
+		${NON_VKQUAKE_SOURCES}
 		"${SRC}/Quake/gl_shaders.c"
 		"${SRC}/Quake/gl_shaders.h"
 		"${SRC}/Quake/steam.c"
@@ -263,7 +263,7 @@ else()
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		${MINIZ_SOURCES}
-		${ZONE_SOURCES}
+		${NON_VKQUAKE_SOURCES}
 	)
 endif()
 
