@@ -68,7 +68,6 @@ set(COMMON_SOURCES
 	"${SRC}/Quake/crc.h"
 	"${SRC}/Quake/cvar.c"
 	"${SRC}/Quake/cvar.h"
-	"${SRC}/Quake/default_cfg.h"
 	"${SRC}/Quake/draw.h"
 	"${SRC}/Quake/filenames.h"
 	"${SRC}/Quake/gl_draw.c"
@@ -185,6 +184,7 @@ set(MINIZ_SOURCES
 
 set(NON_VKQUAKE_SOURCES
 	"${SRC}/Quake/anorm_dots.h"
+	"${SRC}/Quake/default_cfg.h"
 	"${SRC}/Quake/zone.c"
 	"${SRC}/Quake/zone.h"
 )
