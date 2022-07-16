@@ -226,12 +226,14 @@ elseif(PROJECT_VKQUAKE)
 		${SPIKED_SOURCES}
 		${MINIZ_SOURCES}
 		"${SRC}/Quake/atomics.h"
+		"${SRC}/Quake/embedded_pak.c"
 		"${SRC}/Quake/gl_heap.c"
 		"${SRC}/Quake/gl_heap.h"
 		"${SRC}/Quake/mem.c"
 		"${SRC}/Quake/mem.h"
 		"${SRC}/Quake/palette.c"
 		"${SRC}/Quake/palette.h"
+		"${SRC}/Quake/sys_sdl.c"
 		"${SRC}/Quake/tasks.c"
 		"${SRC}/Quake/tasks.h"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias_alphatest.frag.c"
@@ -644,16 +646,16 @@ elseif(PROJECT_VKQUAKE)
 	set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
 endif()
 
-if(PROJECT_VKQUAKE)
-	set(ENGINE_PAK_FILE vkquake.pak)
-elseif(PROJECT_IRONWAIL)
-	set(ENGINE_PAK_FILE ironwail.pak)
-else()
-	set(ENGINE_PAK_FILE quakespasm.pak)
-endif()
+if(NOT PROJECT_VKQUAKE)
+	if(PROJECT_IRONWAIL)
+		set(ENGINE_PAK_FILE ironwail.pak)
+	else()
+		set(ENGINE_PAK_FILE quakespasm.pak)
+	endif()
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND
-	${CMAKE_COMMAND} -E copy_if_different
-	"${SRC}/Quake/${ENGINE_PAK_FILE}"
-	"$<TARGET_PROPERTY:${PROJECT_NAME},BINARY_DIR>/$<CONFIG>/${ENGINE_PAK_FILE}"
-)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND
+		${CMAKE_COMMAND} -E copy_if_different
+		"${SRC}/Quake/${ENGINE_PAK_FILE}"
+		"$<TARGET_PROPERTY:${PROJECT_NAME},BINARY_DIR>/$<CONFIG>/${ENGINE_PAK_FILE}"
+	)
+endif()
