@@ -13,12 +13,12 @@ jobs:
         config:
         - {
             name: "Linux Clang",
-            os: ubuntu-20.04,
+            os: ubuntu-22.04,
             extra_options: "-DCMAKE_C_COMPILER=clang"
           }
         - {
             name: "Linux GCC",
-            os: ubuntu-20.04
+            os: ubuntu-22.04
           }
         - {
             name: "macOS",
