@@ -49,26 +49,7 @@ jobs:
         if [[ "${{ runner.os }}" == 'Linux' ]]; then
           sudo apt update && sudo apt install libflac-dev libmikmod-dev libmpg123-dev libopusfile-dev libsdl2-dev libvorbis-dev libvulkan-dev libxmp-dev zlib1g-dev
         elif [[ "${{ runner.os }}" == 'macOS' ]]; then
-          if [[ "${{ matrix.target }}" == 'vkquake' ]]; then
-            # Install Vulkan headers
-            # Do not use Homebrew package in order to match with loader's version
-            curl -JOL https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/sdk-1.2.189.0.tar.gz
-            tar -xf Vulkan-Headers-sdk-1.2.189.0.tar.gz
-            cd Vulkan-Headers-sdk-1.2.189.0
-            cmake .
-            cmake --build .
-            sudo cmake --install .
-
-            # Install Vulkan loader
-            curl -JOL https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/sdk-1.2.189.0.tar.gz
-            tar -xf Vulkan-Loader-sdk-1.2.189.0.tar.gz
-            cd Vulkan-Loader-sdk-1.2.189.0
-            cmake .
-            cmake --build . --parallel 3
-            sudo cmake --install .
-          fi
-
-          brew install flac libmikmod libvorbis libxmp mpg123 opusfile sdl2
+          brew install flac libmikmod libvorbis libxmp mpg123 opusfile sdl2 vulkan-headers vulkan-loader
         fi
 
     - name: Configure
