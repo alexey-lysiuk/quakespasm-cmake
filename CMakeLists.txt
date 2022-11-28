@@ -243,6 +243,8 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic_notex.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/indirect.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/indirect_clear.comp.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/cs_tex_warp.comp.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/postprocess.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/postprocess.vert.c"
