@@ -211,6 +211,9 @@ elseif(PROJECT_IRONWAIL)
 		${NON_VKQUAKE_SOURCES}
 		"${SRC}/Quake/gl_shaders.c"
 		"${SRC}/Quake/gl_shaders.h"
+		"${SRC}/Quake/json.c"
+		"${SRC}/Quake/jsmn.h"
+		"${SRC}/Quake/json.h"
 		"${SRC}/Quake/steam.c"
 		"${SRC}/Quake/steam.h"
 	)
