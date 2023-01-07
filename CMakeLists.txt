@@ -251,6 +251,7 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/cs_tex_warp.comp.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/postprocess.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/postprocess.vert.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/ray_debug.comp.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit.comp.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit_scale.comp.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit_scale_sops.comp.c"
@@ -265,6 +266,7 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_layer.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_layer.vert.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/update_lightmap.comp.c"
+		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/update_lightmap_rt.comp.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/world.frag.c"
 		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/world.vert.c"
 	)
