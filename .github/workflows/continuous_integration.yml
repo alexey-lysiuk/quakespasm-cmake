@@ -47,7 +47,7 @@ jobs:
       shell: bash
       run: |
         if [[ "${{ runner.os }}" == 'Linux' ]]; then
-          sudo apt update && sudo apt install libflac-dev libmikmod-dev libmpg123-dev libopusfile-dev libsdl2-dev libvorbis-dev libvulkan-dev libxmp-dev zlib1g-dev
+          sudo apt update && sudo apt install libcurl4-openssl-dev libflac-dev libmikmod-dev libmpg123-dev libopusfile-dev libsdl2-dev libvorbis-dev libvulkan-dev libxmp-dev zlib1g-dev
         elif [[ "${{ runner.os }}" == 'macOS' ]]; then
           brew install flac libmikmod libvorbis libxmp mpg123 opusfile sdl2 vulkan-headers vulkan-loader
         fi
