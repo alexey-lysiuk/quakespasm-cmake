@@ -216,6 +216,7 @@ elseif(PROJECT_IRONWAIL)
 		"${SRC}/Quake/json.h"
 		"${SRC}/Quake/steam.c"
 		"${SRC}/Quake/steam.h"
+		"${SRC}/Quake/unicode_translit.h"
 	)
 elseif(PROJECT_VKQUAKE)
 	if(DCMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -653,6 +654,31 @@ if(PROJECT_SPIKED)
 	target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_DL_LIBS})
 elseif(PROJECT_VKQUAKE)
 	set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
+endif()
+
+if(PROJECT_IRONWAIL)
+	find_package(CURL)
+
+	if(NOT CURL_FOUND AND WIN32)
+		set(CURL_FOUND TRUE)
+		set(CURL_DIR "${SRC}/Windows/curl")
+		set(CURL_INCLUDE_DIRS "${CURL_DIR}/include")
+		set(CURL_LIB_DIRS "${CURL_DIR}/lib")
+		set(CURL_LIBRARIES libcurl)
+
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+			target_link_directories(${PROJECT_NAME} PRIVATE "${CURL_LIB_DIRS}/x64")
+		else()
+			target_link_directories(${PROJECT_NAME} PRIVATE "${CURL_LIB_DIRS}/x86")
+		endif()
+	endif()
+
+	if(CURL_FOUND)
+		target_include_directories(${PROJECT_NAME} PRIVATE "${CURL_INCLUDE_DIRS}")
+		target_link_libraries(${PROJECT_NAME} PRIVATE "${CURL_LIBRARIES}")
+	else()
+		message(SEND_ERROR "Could NOT find CURL")
+	endif()
 endif()
 
 if(NOT PROJECT_VKQUAKE)
