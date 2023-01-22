@@ -22,7 +22,7 @@ jobs:
           }
         - {
             name: "macOS",
-            os: macos-11
+            os: macos-12
           }
         - {
             name: "MSVC 32-bit",
