@@ -219,12 +219,6 @@ elseif(PROJECT_IRONWAIL)
 		"${SRC}/Quake/unicode_translit.h"
 	)
 elseif(PROJECT_VKQUAKE)
-	if(DCMAKE_BUILD_TYPE STREQUAL "Debug")
-		set(SHADERS_FLAVOR Debug)
-	else()
-		set(SHADERS_FLAVOR Release)
-	endif()
-
 	set(COMMON_SOURCES
 		${COMMON_SOURCES}
 		${SPIKED_SOURCES}
@@ -240,36 +234,6 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Quake/sys_sdl.c"
 		"${SRC}/Quake/tasks.c"
 		"${SRC}/Quake/tasks.h"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias_alphatest.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/alias.vert.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic_alphatest.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic_notex.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/basic.vert.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/indirect.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/indirect_clear.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/cs_tex_warp.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/postprocess.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/postprocess.vert.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/ray_debug.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit_scale.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_10bit_scale_sops.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_8bit.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_8bit_scale.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/screen_effects_8bit_scale_sops.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/showtris.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/showtris.vert.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_box.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_cube.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_cube.vert.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_layer.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/sky_layer.vert.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/update_lightmap.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/update_lightmap_rt.comp.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/world.frag.c"
-		"${SRC}/Shaders/Compiled/${SHADERS_FLAVOR}/world.vert.c"
 	)
 else()
 	set(COMMON_SOURCES
@@ -544,6 +508,79 @@ if(PROJECT_VKQUAKE)
 	else()
 		message(SEND_ERROR "Could NOT find Vulkan")
 	endif()
+
+	function(find_vulkan_tool TOOL_VARIABLE TOOL_EXECUTABLE)
+		find_program(${TOOL_VARIABLE} ${TOOL_EXECUTABLE})
+		if(NOT ${TOOL_VARIABLE})
+			message(SEND_ERROR "Could NOT find ${TOOL_EXECUTABLE} executable")
+		endif()
+	endfunction()
+
+	find_vulkan_tool(GLSLANG_VALIDATOR_EXECUTABLE "glslangValidator")
+	find_vulkan_tool(SPIRV_OPT_EXECUTABLE "spirv-opt")
+	find_vulkan_tool(SPIRV_REMAP_EXECUTABLE "spirv-remap")
+
+	set(VKQUAKE_SHADERS_DIR "${SRC}/Shaders")
+	set(VKQUAKE_SHADERS
+		alias.frag
+		alias.vert
+		alias_alphatest.frag
+		basic.frag
+		basic.vert
+		basic_alphatest.frag
+		basic_notex.frag
+		cs_tex_warp.comp
+		indirect.comp
+		indirect_clear.comp
+		postprocess.frag
+		postprocess.vert
+		screen_effects_10bit.comp
+		screen_effects_10bit_scale.comp
+		screen_effects_10bit_scale_sops.comp
+		screen_effects_8bit.comp
+		screen_effects_8bit_scale.comp
+		screen_effects_8bit_scale_sops.comp
+		showtris.frag
+		showtris.vert
+		sky_box.frag
+		sky_cube.frag
+		sky_cube.vert
+		sky_layer.frag
+		sky_layer.vert
+		update_lightmap.comp
+		update_lightmap_rt.comp
+		world.frag
+		world.vert
+		ray_debug.comp
+	)
+
+	foreach(SHADER ${VKQUAKE_SHADERS})
+		if(SHADER MATCHES ".+sops.+")
+			set(VULKAN_TARGET_ENV "--target-env" "vulkan1.1")
+		else()
+			set(VULKAN_TARGET_ENV "")
+		endif()
+
+		string(REPLACE . _ SHADER_NAME ${SHADER})
+		set(SHADER_SPV ${SHADER_NAME}.spv)
+		set(SHADER_DEP ${SHADER_NAME}.dep)
+		set(SHADER_C ${SHADER_NAME}.c)
+
+		# TODO: glslangValidator debug flags
+		add_custom_command(OUTPUT ${SHADER_C}
+			COMMAND "${GLSLANG_VALIDATOR_EXECUTABLE}" -V ${VULKAN_TARGET_ENV} -o ${SHADER_SPV} "${VKQUAKE_SHADERS_DIR}/${SHADER}" --depfile ${SHADER_DEP}
+			COMMAND "${SPIRV_OPT_EXECUTABLE}" -Os ${SHADER_SPV} -o ${SHADER_SPV}
+			COMMAND "${SPIRV_REMAP_EXECUTABLE}" -s -o . -i ${SHADER_SPV}
+			COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/bin2c.cmake" -- ${SHADER_SPV} ${SHADER_NAME}_spv ${SHADER_C}
+			MAIN_DEPENDENCY "${VKQUAKE_SHADERS_DIR}/${SHADER}"
+			DEPFILE ${SHADER_DEP}
+		)
+
+		target_sources(${PROJECT_NAME} PRIVATE ${SHADER_C})
+		set_source_files_properties(${SHADER_C} PROPERTIES GENERATED YES)
+	endforeach()
+
+	source_group("Shader Files" REGULAR_EXPRESSION "^${VKQUAKE_SHADERS_DIR}/.+")
 
 	find_package(Threads REQUIRED)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
