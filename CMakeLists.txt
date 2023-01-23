@@ -227,6 +227,8 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Quake/embedded_pak.c"
 		"${SRC}/Quake/gl_heap.c"
 		"${SRC}/Quake/gl_heap.h"
+		"${SRC}/Quake/hash_map.c"
+		"${SRC}/Quake/hash_map.h"
 		"${SRC}/Quake/mem.c"
 		"${SRC}/Quake/mem.h"
 		"${SRC}/Quake/palette.c"
