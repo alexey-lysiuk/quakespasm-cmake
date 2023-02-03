@@ -19,7 +19,7 @@ jobs:
             common: |
               mkdir -p build/glslang
               cd build/glslang
-              GLSLANG_PACKAGE=glslang-11.13.0-${RUNNER_OS}.tar.xz
+              GLSLANG_PACKAGE=glslang-12.0.0-${RUNNER_OS}.tar.xz
               aria2c https://github.com/alexey-lysiuk/quakespasm-cmake/releases/download/ci_deps/${GLSLANG_PACKAGE}
               tar -xf ${GLSLANG_PACKAGE}
             Linux: sudo apt install libvulkan-dev
