@@ -534,6 +534,7 @@ if(PROJECT_VKQUAKE)
 		cs_tex_warp.comp
 		indirect.comp
 		indirect_clear.comp
+		md5.vert
 		postprocess.frag
 		postprocess.vert
 		screen_effects_10bit.comp
