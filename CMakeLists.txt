@@ -332,6 +332,7 @@ if(PROJECT_VKQUAKE)
 		"${SRC}/Quake/mimalloc/mimalloc-internal.h"
 		"${SRC}/Quake/mimalloc/mimalloc-new-delete.h"
 		"${SRC}/Quake/mimalloc/mimalloc-override.h"
+		"${SRC}/Quake/mimalloc/mimalloc-track.h"
 		"${SRC}/Quake/mimalloc/mimalloc-types.h"
 		"${SRC}/Quake/mimalloc/mimalloc.h"
 	)
