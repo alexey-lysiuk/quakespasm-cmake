@@ -201,6 +201,9 @@ if(PROJECT_SPIKED)
 		${SPIKED_SOURCES}
 		${NON_VKQUAKE_SOURCES}
 		"${SRC}/Quake/fs_zip.c"
+		"${SRC}/Quake/pmove.c"
+		"${SRC}/Quake/pmove.h"
+		"${SRC}/Quake/pmovetst.c"
 		"${SRC}/Quake/snd_voip.c"
 		"${SRC}/Quake/snd_voip.h"
 	)
