@@ -725,7 +725,7 @@ if(PROJECT_IRONWAIL)
 		target_include_directories(${PROJECT_NAME} PRIVATE "${CURL_INCLUDE_DIRS}")
 		target_link_libraries(${PROJECT_NAME} PRIVATE "${CURL_LIBRARIES}")
 	else()
-		message(SEND_ERROR "Could NOT find CURL")
+		target_compile_definitions(${PROJECT_NAME} PRIVATE WITHOUT_CURL)
 	endif()
 endif()
 
