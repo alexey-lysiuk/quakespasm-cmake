@@ -55,7 +55,7 @@ jobs:
           cmake_args: -A x64
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Checkout Source Code
       shell: bash
