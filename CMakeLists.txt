@@ -345,6 +345,13 @@ else()
 		"${SRC}/Windows/QuakeSpasm.ico"
 		"${SRC}/Windows/QuakeSpasm.rc"
 	)
+
+	if(PROJECT_IRONWAIL AND MSVC)
+		set(OTHER_FILES
+			${OTHER_FILES}
+			"${SRC}/Windows/VisualStudio/ironwail.natvis"
+		)
+	endif()
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
