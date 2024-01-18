@@ -217,6 +217,7 @@ elseif(PROJECT_IRONWAIL)
 		"${SRC}/Quake/json.c"
 		"${SRC}/Quake/jsmn.h"
 		"${SRC}/Quake/json.h"
+		"${SRC}/Quake/stb_image.h"
 		"${SRC}/Quake/steam.c"
 		"${SRC}/Quake/steam.h"
 		"${SRC}/Quake/unicode_translit.h"
