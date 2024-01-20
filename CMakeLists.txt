@@ -376,7 +376,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 if(MSVC)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
-	set(CMAKE_C_FLAGS "/MP /wd4996 ${CMAKE_C_FLAGS}")
+	target_compile_options(${PROJECT_NAME} PRIVATE /MP /wd4996)
 else()
 	option(QUAKE_SEARCH_USERDIRS "Search user directories for data" OFF)
 
@@ -398,7 +398,7 @@ if(APPLE)
 	)
 
 	if(${CMAKE_GENERATOR} STREQUAL Xcode)
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-shorten-64-to-32")
+		target_compile_options(${PROJECT_NAME} PRIVATE -Wno-shorten-64-to-32)
 	endif()
 
 	set(PLATFORM_SOURCE
