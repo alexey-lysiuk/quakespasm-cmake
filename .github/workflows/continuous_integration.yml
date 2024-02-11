@@ -43,7 +43,7 @@ jobs:
           deps: sudo apt update && sudo apt install libflac-dev libmikmod-dev libmpg123-dev libopusfile-dev libsdl2-dev libvorbis-dev libxmp-dev
 
         - name: macOS
-          os: macos-12
+          os: macos-13
           deps: brew install flac libmikmod libvorbis libxmp mpg123 opusfile sdl2
 
         - name: MSVC 32-bit
