@@ -312,33 +312,39 @@ if(PROJECT_VKQUAKE)
 
 	set(OTHER_FILES
 		${OTHER_FILES}
+		"${SRC}/Quake/mimalloc/prim/osx/alloc-override-zone.c"
+		"${SRC}/Quake/mimalloc/prim/osx/prim.c"
+		"${SRC}/Quake/mimalloc/prim/unix/prim.c"
+		"${SRC}/Quake/mimalloc/prim/wasi/prim.c"
+		"${SRC}/Quake/mimalloc/prim/windows/prim.c"
+		"${SRC}/Quake/mimalloc/prim/windows/etw.h"
+		"${SRC}/Quake/mimalloc/mimalloc/atomic.h"
+		"${SRC}/Quake/mimalloc/mimalloc/internal.h"
+		"${SRC}/Quake/mimalloc/mimalloc/prim.h"
+		"${SRC}/Quake/mimalloc/mimalloc/track.h"
+		"${SRC}/Quake/mimalloc/mimalloc/types.h"
+		"${SRC}/Quake/mimalloc/prim/prim.c"
 		"${SRC}/Quake/mimalloc/alloc-aligned.c"
-		"${SRC}/Quake/mimalloc/alloc-override-osx.c"
 		"${SRC}/Quake/mimalloc/alloc-override.c"
 		"${SRC}/Quake/mimalloc/alloc-posix.c"
 		"${SRC}/Quake/mimalloc/alloc.c"
 		"${SRC}/Quake/mimalloc/arena.c"
 		"${SRC}/Quake/mimalloc/bitmap.c"
-		"${SRC}/Quake/mimalloc/bitmap.h"
 		"${SRC}/Quake/mimalloc/heap.c"
 		"${SRC}/Quake/mimalloc/init.c"
-		"${SRC}/Quake/mimalloc/mimalloc-atomic.h"
-		"${SRC}/Quake/mimalloc/mimalloc-internal.h"
-		"${SRC}/Quake/mimalloc/mimalloc-new-delete.h"
-		"${SRC}/Quake/mimalloc/mimalloc-override.h"
-		"${SRC}/Quake/mimalloc/mimalloc-track.h"
-		"${SRC}/Quake/mimalloc/mimalloc-types.h"
-		"${SRC}/Quake/mimalloc/mimalloc.h"
 		"${SRC}/Quake/mimalloc/options.c"
 		"${SRC}/Quake/mimalloc/os.c"
 		"${SRC}/Quake/mimalloc/page-queue.c"
 		"${SRC}/Quake/mimalloc/page.c"
 		"${SRC}/Quake/mimalloc/random.c"
-		"${SRC}/Quake/mimalloc/region.c"
-		"${SRC}/Quake/mimalloc/segment-cache.c"
+		"${SRC}/Quake/mimalloc/segment-map.c"
 		"${SRC}/Quake/mimalloc/segment.c"
 		"${SRC}/Quake/mimalloc/static.c"
 		"${SRC}/Quake/mimalloc/stats.c"
+		"${SRC}/Quake/mimalloc/bitmap.h"
+		"${SRC}/Quake/mimalloc/mimalloc-new-delete.h"
+		"${SRC}/Quake/mimalloc/mimalloc-override.h"
+		"${SRC}/Quake/mimalloc/mimalloc.h"
 	)
 else()
 	set(WINDOWS_SOURCES
@@ -603,6 +609,7 @@ if(PROJECT_VKQUAKE)
 
 	find_package(Threads REQUIRED)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
+	target_include_directories(${PROJECT_NAME} PRIVATE "${SRC}/Quake/mimalloc")
 else()
 	set(OpenGL_GL_PREFERENCE GLVND)
 	find_package(OpenGL REQUIRED)
