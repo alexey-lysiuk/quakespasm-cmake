@@ -312,6 +312,7 @@ if(PROJECT_VKQUAKE)
 
 	set(OTHER_FILES
 		${OTHER_FILES}
+		"${SRC}/Quake/mimalloc/prim/emscripten/prim.c"
 		"${SRC}/Quake/mimalloc/prim/osx/alloc-override-zone.c"
 		"${SRC}/Quake/mimalloc/prim/osx/prim.c"
 		"${SRC}/Quake/mimalloc/prim/unix/prim.c"
@@ -330,8 +331,10 @@ if(PROJECT_VKQUAKE)
 		"${SRC}/Quake/mimalloc/alloc.c"
 		"${SRC}/Quake/mimalloc/arena.c"
 		"${SRC}/Quake/mimalloc/bitmap.c"
+		"${SRC}/Quake/mimalloc/free.c"
 		"${SRC}/Quake/mimalloc/heap.c"
 		"${SRC}/Quake/mimalloc/init.c"
+		"${SRC}/Quake/mimalloc/libc.c"
 		"${SRC}/Quake/mimalloc/options.c"
 		"${SRC}/Quake/mimalloc/os.c"
 		"${SRC}/Quake/mimalloc/page-queue.c"
