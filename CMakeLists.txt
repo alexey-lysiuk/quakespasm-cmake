@@ -261,7 +261,7 @@ set(LINUX_SOURCES
 )
 
 set(MACOS_SOURCES
-	"${SRC}/Quake/pl_osx.m" 
+	"${SRC}/Quake/pl_osx.m"
 )
 
 if(PROJECT_QUAKESPASM OR PROJECT_SPIKED)
@@ -430,7 +430,7 @@ if(APPLE)
 			MACOSX_BUNDLE_INFO_PLIST "${SRC}/MacOSX/Info.plist"
 			XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "net.sf.quakespasm.QuakeSpasm"
 		)
-		set_source_files_properties(${MACOS_RESOURCES} PROPERTIES 
+		set_source_files_properties(${MACOS_RESOURCES} PROPERTIES
 			MACOSX_PACKAGE_LOCATION Resources
 		)
 	else()
