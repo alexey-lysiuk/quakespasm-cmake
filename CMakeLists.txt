@@ -240,6 +240,7 @@ elseif(PROJECT_VKQUAKE)
 		"${SRC}/Quake/sys_sdl.c"
 		"${SRC}/Quake/tasks.c"
 		"${SRC}/Quake/tasks.h"
+		"${SRC}/Quake/quakever.h"
 	)
 else()
 	set(COMMON_SOURCES
@@ -348,6 +349,8 @@ if(PROJECT_VKQUAKE)
 		"${SRC}/Quake/mimalloc/mimalloc-new-delete.h"
 		"${SRC}/Quake/mimalloc/mimalloc-override.h"
 		"${SRC}/Quake/mimalloc/mimalloc.h"
+		"${SRC}/Windows/.clang-format"
+		"${SRC}/.clang-format"
 	)
 else()
 	set(WINDOWS_SOURCES
