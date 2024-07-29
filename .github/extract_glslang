@@ -1,18 +1,8 @@
-#!/usr/bin/env python3
+#!/bin/sh
 
-import sys
+set -o errexit
 
-f = open(sys.argv[1], 'rb')
-content = f.read()
-
-header = b'7z\xbc\xaf\x27\x1c'
-pos7z = content.find(header, content.find(header) + 1)
-assert pos7z != 0
-
-f = open('vulkan-sdk.7z', 'wb')
-f.write(content[pos7z:])
-
-'''
+cd "${0%/*}"
 
 VULKAN_SDK_VERSION=1.3.283.0
 GLSLANG_VERSION=14.2.0
@@ -39,5 +29,3 @@ curl -JOL https://sdk.lunarg.com/sdk/download/$VULKAN_SDK_VERSION/windows/Vulkan
 ./7zz e vulkan-sdk.7z Bin/glslangValidator.exe Bin/spirv-opt.exe Bin/spirv-remap.exe
 tar -cJf glslang-$GLSLANG_VERSION-Windows.tar.xz glslangValidator.exe spirv-opt.exe spirv-remap.exe
 rm VulkanSDK-$VULKAN_SDK_VERSION-Installer.exe vulkan-sdk.7z glslangValidator.exe spirv-opt.exe spirv-remap.exe
-
-'''
