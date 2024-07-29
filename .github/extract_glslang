@@ -19,13 +19,13 @@ curl -JOL https://sdk.lunarg.com/sdk/download/$VULKAN_SDK_VERSION/mac/vulkansdk-
 hdiutil attach vulkansdk-macos-$VULKAN_SDK_VERSION.dmg
 ./extract_vulkan-sdk_7z.py /Volumes/vulkansdk-macos-$VULKAN_SDK_VERSION/InstallVulkan.app/Contents/Resources/installer.dat
 hdiutil detach /Volumes/vulkansdk-macos-$VULKAN_SDK_VERSION
-./7zz e vulkan-sdk.7z macOS/bin/glslang macOS/bin/glslangValidator macOS/bin/spirv-opt macOS/bin/spirv-remap
+tar --strip-components=2 -xf vulkan-sdk.7z macOS/bin/glslang macOS/bin/glslangValidator macOS/bin/spirv-opt macOS/bin/spirv-remap
 tar -cJf glslang-$GLSLANG_VERSION-macOS.tar.xz glslang glslangValidator spirv-opt spirv-remap
 rm vulkansdk-macos-$VULKAN_SDK_VERSION.dmg vulkan-sdk.7z glslang glslangValidator spirv-opt spirv-remap
 
 # === Windows ===
 curl -JOL https://sdk.lunarg.com/sdk/download/$VULKAN_SDK_VERSION/windows/VulkanSDK-$VULKAN_SDK_VERSION-Installer.exe
 ./extract_vulkan-sdk_7z.py VulkanSDK-$VULKAN_SDK_VERSION-Installer.exe
-./7zz e vulkan-sdk.7z Bin/glslangValidator.exe Bin/spirv-opt.exe Bin/spirv-remap.exe
+tar --strip-components=1 -xf vulkan-sdk.7z Bin/glslangValidator.exe Bin/spirv-opt.exe Bin/spirv-remap.exe
 tar -cJf glslang-$GLSLANG_VERSION-Windows.tar.xz glslangValidator.exe spirv-opt.exe spirv-remap.exe
 rm VulkanSDK-$VULKAN_SDK_VERSION-Installer.exe vulkan-sdk.7z glslangValidator.exe spirv-opt.exe spirv-remap.exe
