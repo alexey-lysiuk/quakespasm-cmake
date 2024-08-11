@@ -300,9 +300,15 @@ set(WINDOWS_SOURCES
 )
 
 set(OTHER_FILES
-	"${SRC}/Quake/cd_sdl.c"
 	"${SRC}/Quake/lodepng.c"
 )
+
+if(NOT PROJECT_IRONWAIL)
+	set(OTHER_FILES
+		${OTHER_FILES}
+		"${SRC}/Quake/cd_sdl.c"
+	)
+endif()
 
 if(PROJECT_VKQUAKE)
 	set(WINDOWS_SOURCES
