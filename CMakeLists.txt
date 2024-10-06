@@ -387,6 +387,12 @@ else()
 	add_executable(${PROJECT_NAME} WIN32)
 endif()
 
+if(PROJECT_VKQUAKE)
+	set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
+else()
+	set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 90)
+endif()
+
 target_compile_definitions(${PROJECT_NAME} PRIVATE
 	USE_CODEC_UMX
 	USE_CODEC_WAVE
@@ -725,8 +731,6 @@ if(PROJECT_SPIKED)
 	endif()
 
 	target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_DL_LIBS})
-elseif(PROJECT_VKQUAKE)
-	set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
 endif()
 
 if(PROJECT_IRONWAIL)
