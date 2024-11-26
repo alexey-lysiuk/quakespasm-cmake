@@ -1,0 +1,18 @@
+name: Submodules Status
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    name: Submodules Status
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Update Submodules
+      run: |
+        git -c color.ui=always submodule update --remote --merge
+        git -c color.ui=always status
