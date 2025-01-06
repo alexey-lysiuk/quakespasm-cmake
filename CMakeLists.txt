@@ -142,6 +142,8 @@ set(COMMON_SOURCES
 	"${SRC}/Quake/snd_mem.c"
 	"${SRC}/Quake/snd_mikmod.c"
 	"${SRC}/Quake/snd_mikmod.h"
+	"${SRC}/Quake/snd_modplug.c"
+	"${SRC}/Quake/snd_modplug.h"
 	"${SRC}/Quake/snd_mix.c"
 	"${SRC}/Quake/snd_mp3.h"
 	"${SRC}/Quake/snd_mp3tag.c"
@@ -683,12 +685,6 @@ find_codec(NAME FLAC
 	DEFINE USE_CODEC_FLAC
 )
 
-find_codec(NAME MIKMOD
-	HEADER mikmod.h
-	LIBRARIES mikmod
-	DEFINE USE_CODEC_MIKMOD
-)
-
 find_codec(NAME MPG123
 	HEADER mpg123.h
 	LIBRARIES mpg123
@@ -723,6 +719,22 @@ find_codec(NAME XMP
 	LIBRARIES xmp
 	DEFINE USE_CODEC_XMP
 )
+
+if(NOT XMP_FOUND)
+	find_codec(NAME MIKMOD
+		HEADER mikmod.h
+		LIBRARIES mikmod
+		DEFINE USE_CODEC_MIKMOD
+	)
+
+	if(NOT MIKMOD_FOUND)
+		find_codec(NAME MODPLUG
+			HEADER libmodplug/modplug.h
+			LIBRARIES modplug
+			DEFINE USE_CODEC_MODPLUG
+		)
+	endif()
+endif()
 
 if(PROJECT_SPIKED)
 	find_package(ZLIB)
