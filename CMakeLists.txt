@@ -1,5 +1,4 @@
-# FindVulkan module requires CMake 3.7
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.10)
 
 if(QUAKE_TARGET)
 	set(SRC "${CMAKE_SOURCE_DIR}/src/${QUAKE_TARGET}")
