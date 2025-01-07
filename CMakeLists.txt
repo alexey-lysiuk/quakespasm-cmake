@@ -683,12 +683,6 @@ find_codec(NAME FLAC
 	DEFINE USE_CODEC_FLAC
 )
 
-find_codec(NAME MIKMOD
-	HEADER mikmod.h
-	LIBRARIES mikmod
-	DEFINE USE_CODEC_MIKMOD
-)
-
 find_codec(NAME MPG123
 	HEADER mpg123.h
 	LIBRARIES mpg123
@@ -723,6 +717,14 @@ find_codec(NAME XMP
 	LIBRARIES xmp
 	DEFINE USE_CODEC_XMP
 )
+
+if(NOT XMP_FOUND)
+	find_codec(NAME MIKMOD
+		HEADER mikmod.h
+		LIBRARIES mikmod
+		DEFINE USE_CODEC_MIKMOD
+	)
+endif()
 
 if(PROJECT_SPIKED)
 	find_package(ZLIB)
