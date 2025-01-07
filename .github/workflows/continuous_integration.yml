@@ -33,22 +33,20 @@ jobs:
         toolchain:
         - name: Linux Clang
           os: ubuntu-24.04
-          # TODO: find the way to avoid duplication of dependencies command
-          deps: sudo apt update && sudo apt install libflac-dev libmikmod-dev libmpg123-dev libopusfile-dev libsdl2-dev libvorbis-dev libxmp-dev
+          deps: sudo apt update && sudo apt install libflac-dev libmpg123-dev libmodplug-dev libopusfile-dev libsdl2-dev libvorbis-dev
           cmake_args: -DCMAKE_C_COMPILER=clang
 
         - name: Linux GCC
           os: ubuntu-24.04
-          # TODO: find the way to avoid duplication of dependencies command
-          deps: sudo apt update && sudo apt install libflac-dev libmikmod-dev libmpg123-dev libopusfile-dev libsdl2-dev libvorbis-dev libxmp-dev
+          deps: sudo apt update && sudo apt install libflac-dev libmpg123-dev libopusfile-dev libsdl2-dev libvorbis-dev libxmp-dev
 
         - name: macOS Intel
           os: macos-13
-          deps: brew install flac libmikmod libvorbis libxmp mpg123 opusfile sdl2
+          deps: brew install flac libmikmod libvorbis mpg123 opusfile sdl2
 
         - name: macOS ARM
           os: macos-14
-          deps: brew install flac libmikmod libvorbis libxmp mpg123 opusfile sdl2
+          deps: brew install flac libvorbis libxmp mpg123 opusfile sdl2
 
         - name: MSVC 32-bit
           os: windows-2022
