@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)  # needed for string(APPEND)
+cmake_minimum_required(VERSION 3.10)
 
 function(bin2c INPUT_FILE VARIABLE_NAME OUTPUT_FILE)
 	#message("bin2c(\"${INPUT_FILE}\" \"${VARIABLE_NAME}\" \"${OUTPUT_FILE}\")")
