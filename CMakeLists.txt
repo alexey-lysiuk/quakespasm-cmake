@@ -142,6 +142,8 @@ set(COMMON_SOURCES
 	"${SRC}/Quake/snd_mem.c"
 	"${SRC}/Quake/snd_mikmod.c"
 	"${SRC}/Quake/snd_mikmod.h"
+	"${SRC}/Quake/snd_modplug.c"
+	"${SRC}/Quake/snd_modplug.h"
 	"${SRC}/Quake/snd_mix.c"
 	"${SRC}/Quake/snd_mp3.h"
 	"${SRC}/Quake/snd_mp3tag.c"
@@ -724,6 +726,14 @@ if(NOT XMP_FOUND)
 		LIBRARIES mikmod
 		DEFINE USE_CODEC_MIKMOD
 	)
+
+	if(NOT MIKMOD_FOUND)
+		find_codec(NAME MODPLUG
+			HEADER libmodplug/modplug.h
+			LIBRARIES modplug
+			DEFINE USE_CODEC_MODPLUG
+		)
+	endif()
 endif()
 
 if(PROJECT_SPIKED)
