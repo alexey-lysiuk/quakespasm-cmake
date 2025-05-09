@@ -591,8 +591,10 @@ if(PROJECT_VKQUAKE)
 		sky_cube.vert
 		sky_layer.frag
 		sky_layer.vert
-		update_lightmap.comp
-		update_lightmap_rt.comp
+		update_lightmap_10bit.comp
+		update_lightmap_10bit_rt.comp
+		update_lightmap_8bit.comp
+		update_lightmap_8bit_rt.comp
 		world.frag
 		world.vert
 		ray_debug.comp
