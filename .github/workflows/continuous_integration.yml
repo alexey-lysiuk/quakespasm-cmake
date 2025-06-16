@@ -12,7 +12,7 @@ jobs:
         target:
         - name: quakespasm
 
-        - name: quakespasm-spiked
+        # - name: quakespasm-spiked
 
         - name: vkquake
           deps:
