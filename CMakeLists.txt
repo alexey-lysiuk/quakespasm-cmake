@@ -201,6 +201,19 @@ if(PROJECT_SPIKED)
 		${COMMON_SOURCES}
 		${SPIKED_SOURCES}
 		${NON_VKQUAKE_SOURCES}
+		"${SRC}/Quake/ice/ice_gnutls.c"
+		"${SRC}/Quake/ice/ice_main.c"
+		"${SRC}/Quake/ice/ice_mdns.c"
+		"${SRC}/Quake/ice/ice_quake.c"
+		"${SRC}/Quake/ice/ice_sctp.c"
+		"${SRC}/Quake/ice/ice_socket.c"
+		"${SRC}/Quake/ice/ice_stream.c"
+		"${SRC}/Quake/ice/json.c"
+		"${SRC}/Quake/ice/md5.c"
+		"${SRC}/Quake/ice/sha1.c"
+		"${SRC}/Quake/ice/sha2.c"
+		"${SRC}/Quake/ice/ice_private.h"
+		"${SRC}/Quake/ice/ice_quake.h"
 		"${SRC}/Quake/fs_zip.c"
 		"${SRC}/Quake/pmove.c"
 		"${SRC}/Quake/pmove.h"
@@ -744,6 +757,18 @@ if(PROJECT_SPIKED)
 		target_compile_definitions(${PROJECT_NAME} PRIVATE USE_ZLIB)
 		target_include_directories(${PROJECT_NAME} PRIVATE "${ZLIB_INCLUDE_DIR}")
 		target_link_libraries(${PROJECT_NAME} PRIVATE "${ZLIB_LIBRARY}")
+	endif()
+
+	find_package(GnuTLS)
+	if(GNUTLS_FOUND)
+		target_compile_definitions(${PROJECT_NAME} PRIVATE USE_GNUTLS)
+		target_include_directories(${PROJECT_NAME} PRIVATE "${GNUTLS_INCLUDE_DIR}")
+		target_link_libraries(${PROJECT_NAME} PRIVATE "${GNUTLS_LIBRARY}")
+
+		if(APPLE)
+			# macOS does not have this flag defined
+			target_compile_definitions(${PROJECT_NAME} PRIVATE SOCK_CLOEXEC=0)
+		endif()
 	endif()
 
 	target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_DL_LIBS})
