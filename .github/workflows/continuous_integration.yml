@@ -17,7 +17,9 @@ jobs:
         target:
         - name: quakespasm
 
-        # - name: quakespasm-spiked
+        - name: quakespasm-spiked
+          deps:
+            Linux: sudo apt install libgnutls28-dev
 
         - name: vkquake
           deps:
@@ -83,6 +85,8 @@ jobs:
       id: cpu-cores
 
     - name: Build
+      # Remove the next line when support of building quakespasm-spiked with MSVC will be reestablished
+      if: runner.os != 'Windows' || matrix.target.name != 'quakespasm-spiked'
       run: |
         export MAKEFLAGS=--keep-going
         cmake --build build --config Release --parallel ${{ steps.cpu-cores.outputs.count }}
