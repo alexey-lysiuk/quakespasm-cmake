@@ -20,6 +20,7 @@ jobs:
         - name: quakespasm-spiked
           deps:
             Linux: sudo apt install libgnutls28-dev
+            Windows: vcpkg install zlib zlib:x86-windows
 
         - name: vkquake
           deps:
@@ -57,10 +58,11 @@ jobs:
 
         - name: MSVC 32-bit
           os: windows-2025
-          cmake_args: -A Win32
+          cmake_args: -A Win32 -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLATION_ROOT/installed/x86-windows
 
         - name: MSVC 64-bit
           os: windows-2025
+          cmake_args: -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLATION_ROOT/installed/x64-windows
 
     steps:
     - uses: actions/checkout@v4
@@ -85,8 +87,6 @@ jobs:
       id: cpu-cores
 
     - name: Build
-      # Remove the next line when support of building quakespasm-spiked with MSVC will be reestablished
-      if: runner.os != 'Windows' || matrix.target.name != 'quakespasm-spiked'
       run: |
         export MAKEFLAGS=--keep-going
         cmake --build build --config Release --parallel ${{ steps.cpu-cores.outputs.count }}
