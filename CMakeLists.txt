@@ -752,6 +752,16 @@ if(NOT XMP_FOUND)
 endif()
 
 if(PROJECT_SPIKED)
+	if(MSVC)
+		# Fixes for the following linker errors
+		# > ice_main.obj : error LNK2019: unresolved external symbol alloca referenced in function TURN_Encapsulate
+		# > ice_stream.obj : error LNK2001: unresolved external symbol alloca
+		# > json.obj : error LNK2019: unresolved external symbol strncasecmp referenced in function JSON_ParseNode
+		# > sha1.obj : error LNK2001: unresolved external symbol alloca
+		target_compile_options(${PROJECT_NAME} PRIVATE /FI malloc.h)
+		set_source_files_properties("${SRC}/Quake/ice/json.c" PROPERTIES COMPILE_DEFINITIONS strncasecmp=q_strncasecmp)
+	endif()
+
 	# zlib is required by Quake\ice\ice_main.c
 	find_package(ZLIB REQUIRED)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_ZLIB)
