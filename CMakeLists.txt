@@ -752,12 +752,11 @@ if(NOT XMP_FOUND)
 endif()
 
 if(PROJECT_SPIKED)
-	find_package(ZLIB)
-	if(ZLIB_FOUND)
-		target_compile_definitions(${PROJECT_NAME} PRIVATE USE_ZLIB)
-		target_include_directories(${PROJECT_NAME} PRIVATE "${ZLIB_INCLUDE_DIR}")
-		target_link_libraries(${PROJECT_NAME} PRIVATE "${ZLIB_LIBRARY}")
-	endif()
+	# zlib is required by Quake\ice\ice_main.c
+	find_package(ZLIB REQUIRED)
+	target_compile_definitions(${PROJECT_NAME} PRIVATE USE_ZLIB)
+	target_include_directories(${PROJECT_NAME} PRIVATE "${ZLIB_INCLUDE_DIR}")
+	target_link_libraries(${PROJECT_NAME} PRIVATE "${ZLIB_LIBRARY}")
 
 	find_package(GnuTLS)
 	if(GNUTLS_FOUND)
