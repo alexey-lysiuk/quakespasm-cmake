@@ -48,13 +48,13 @@ jobs:
           os: ubuntu-24.04
           deps: sudo apt update && sudo apt install libflac-dev libmpg123-dev libopusfile-dev libsdl2-dev libvorbis-dev libxmp-dev
 
-        - name: macOS Intel
-          os: macos-13
-          deps: brew install flac libmikmod libvorbis mpg123 opusfile sdl2
-
         - name: macOS ARM
           os: macos-15
           deps: brew install flac libvorbis libxmp mpg123 opusfile sdl2
+
+        - name: macOS Intel
+          os: macos-15-intel
+          deps: brew install flac libmikmod libvorbis mpg123 opusfile sdl2
 
         - name: MSVC 32-bit
           os: windows-2025
@@ -65,7 +65,7 @@ jobs:
           cmake_args: -DCMAKE_PREFIX_PATH=$VCPKG_INSTALLATION_ROOT/installed/x64-windows
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Checkout Source Code
       run: |
